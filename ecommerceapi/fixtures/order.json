@@ -1,0 +1,29 @@
+[
+  {
+    "model": "ecommerceapi.order",
+    "pk": 1,
+    "fields": {
+      "customer_id": 1,
+      "payment_type_id": 1,
+      "created_at": "2017-09-23T14:06:30.047Z"
+    }
+  },
+  {
+    "model": "ecommerceapi.order",
+    "pk": 2,
+    "fields": {
+      "customer_id": 2,
+      "payment_type_id": 2,
+      "created_at": "2018-09-23T14:06:30.047Z"
+    }
+  },
+  {
+    "model": "ecommerceapi.order",
+    "pk": 3,
+    "fields": {
+      "customer_id": 3,
+      "payment_type_id": null,
+      "created_at": "2019-09-23T14:06:30.047Z"
+    }
+  }
+]
