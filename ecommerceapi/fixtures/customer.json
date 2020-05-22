@@ -1,0 +1,29 @@
+[
+  {
+      "model": "ecommerceapi.customer",
+      "pk": 1,
+      "fields": {
+          "user_id": 1,
+          "address": "123 Main Street",
+          "phone_number": "615-342-2341"
+      }
+  },
+  {
+      "model": "ecommerceapi.customer",
+      "pk": 2,
+      "fields": {
+          "user_id": 2,
+          "address": "456 Broadway",
+          "phone_number": "234-553-3983"
+      }
+  },
+  {
+      "model": "ecommerceapi.customer",
+      "pk": 3,
+      "fields": {
+          "user_id": 3,
+          "address": "789 Union Ave.",
+          "phone_number": "222-232-2122"
+      }
+  }
+]

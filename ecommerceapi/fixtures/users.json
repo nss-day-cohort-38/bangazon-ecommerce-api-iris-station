@@ -1,0 +1,41 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$10yCtpQpDTEI$PwDkDJvyKpH7xSLQhOXl2yY7t3yxu59/l6eEtDT0Hm8=",
+      "last_login": null, 
+      "username": "hr_fred", 
+      "first_name": "Fred",
+      "last_name": "Jones",
+      "email": "fred@bangazon.com",
+      "date_joined": "2019-09-23T14:06:30.047Z"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$10yCtpQpDTEI$PwDkDJvyKpH7xSLQhOXl2yY7t3yxu59/l6eEtDT0Hm8=",
+      "last_login": null, 
+      "username": "dab", 
+      "first_name": "Dancy",
+      "last_name": "Abernaty",
+      "email": "dancy@bangazon.com",
+      "date_joined": "2018-09-23T14:06:30.047Z"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$10yCtpQpDTEI$PwDkDJvyKpH7xSLQhOXl2yY7t3yxu59/l6eEtDT0Hm8=",
+      "last_login": null, 
+      "username": "harv", 
+      "first_name": "Harvy",
+      "last_name": "Vance",
+      "email": "harvy@bangazon.com",
+      "date_joined": "2017-09-23T14:06:30.047Z"
+    }
+  }
+]
