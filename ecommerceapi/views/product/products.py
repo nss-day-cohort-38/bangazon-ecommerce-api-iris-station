@@ -7,7 +7,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from ecommerceapi.models import Product
+from ecommerceapi.models import Product, Customer
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for products
@@ -32,7 +32,23 @@ class Products(ViewSet):
         ViewSet '''
 
     def create(self, request):
-        pass
+        ''' Handle POST operations and returns JSON serialized product instance'''
+
+        newproduct = Product()
+        newproduct.title = request.data["title"]
+        newproduct.price = request.data["price"]
+        newproduct.description = request.data["description"]
+        newproduct.quantity = request.data["quantity"]
+        newproduct.location = request.data["location"]
+        newproduct.image_path = request.data["image_path"]
+        newproduct.created_at = request.data["created_at"]
+        newcustomer = Customer.objects.get(user = request.auth.user)
+        newproduct.customer = newcustomer
+        newproduct.save()
+
+        serializer = ProductSerializer(newproduct, context={'request': request})
+
+        return Response(serializer.data)
     
     def list(self, request):
         ''' handles get requests to server and returns a JSON response'''
