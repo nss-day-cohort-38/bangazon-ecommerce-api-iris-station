@@ -21,6 +21,7 @@ local_settings.py
 # virtualenv
 bangazonEnv/
 .vscode
+bangzonEnv/
 
 .DS_Store
 *.sqlite3
