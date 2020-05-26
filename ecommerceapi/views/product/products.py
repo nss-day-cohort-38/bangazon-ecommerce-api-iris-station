@@ -46,7 +46,15 @@ class Products(ViewSet):
         return Response(serializer.data)
     
     def retrieve(self, request, pk=None):
-        pass
+        '''handles fetching ony one product'''
+        try:
+            product = Product.objects.get(pk=pk)
+            serializer = ProductSerializer(product, many=False, context={'request': request})
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+
+         
     def update(self, request, pk=None): 
         pass
 
