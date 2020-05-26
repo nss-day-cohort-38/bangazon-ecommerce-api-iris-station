@@ -37,4 +37,4 @@ class Products(ViewSet):
     def update(self, request, pk=None): 
 
 
-    def destroy:(self, request, pk=None):
+    def destroy(self, request, pk=None):
