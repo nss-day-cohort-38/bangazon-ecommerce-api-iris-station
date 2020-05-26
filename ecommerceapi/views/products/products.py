@@ -27,14 +27,15 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 class Products(ViewSet):
 
     def create(self, request):
-
+        pass
     
     def list(self, request):
-
+        pass
     
     def retrieve(self, request, pk=None):
-
+        pass
     def update(self, request, pk=None): 
-
+        pass
 
     def destroy(self, request, pk=None):
+        pass
