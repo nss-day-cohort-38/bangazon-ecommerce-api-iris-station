@@ -52,8 +52,12 @@ class Products(ViewSet):
     
     def list(self, request):
         ''' handles get requests to server and returns a JSON response'''
-        
-        products = Product.objects.all()
+        home = self.request.query_params.get('number', None)
+        if home is not None:
+            products = Product.objects.all()[:20]
+        else:
+             products = Product.objects.all()
+
         serializer = ProductSerializer(products, many=True, context={"request": request})
         return Response(serializer.data)
     
