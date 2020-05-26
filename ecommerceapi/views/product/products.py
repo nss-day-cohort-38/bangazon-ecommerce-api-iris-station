@@ -21,16 +21,25 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             view_name='products',
             lookup_field='id'
         )
-        fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'image_path', 'product_type_id')
+        fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'created_at', 'image_path', 'product_type_id')
         depth = 1
 
 class Products(ViewSet):
+
+    '''' a class to handle all the products viewset
+
+    Arguments:
+        ViewSet '''
 
     def create(self, request):
         pass
     
     def list(self, request):
-        pass
+        ''' handles get requests to server and returns a JSON response'''
+        
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True, context={"request": request})
+        return Response(serializer.data)
     
     def retrieve(self, request, pk=None):
         pass
