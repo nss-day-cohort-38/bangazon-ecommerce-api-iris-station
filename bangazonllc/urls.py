@@ -13,9 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
+
+from django.urls import include, path
+from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
+from ecommerceapi.models import *
+from ecommerceapi.views import *
+
+router = routers.DefaultRouter(trailing_slash=False)
+# router.register(r'customers', Customers, 'customer')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    path('register/', register_user),
+    path('login/', login_user),
+    path('api-token-auth/', obtain_auth_token),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
