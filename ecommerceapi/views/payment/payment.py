@@ -4,8 +4,12 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from ecommerceapi.models import PaymentType
+from django.utils import timezone
+
+from ecommerceapi.models import PaymentType, Customer
 from .paymentserializer import PaymentSerializer
+from datetime import datetime
+from rest_framework.authtoken.models import Token
 
 
 class Payments(ViewSet):
@@ -17,11 +21,19 @@ class Payments(ViewSet):
         Returns:
             Response -- JSON serialized Payments instance
         """
+        data = request.data
+        now = datetime.now(tz=timezone.utc)
+        user_id = request.user.id
         new_payment = PaymentType.objects.create(
-            name=request.data["name"]
+            merchant_name=data["merchant_name"],
+            account_number=data["account_number"],
+            expiration_date=data["expiration_date"],
+            customer=Customer.objects.get(user__id=user_id),
+            created_at=now
         )
 
-        serializer = PaymentSerializer(new_payment, context={'request': request})
+        serializer = PaymentSerializer(
+            new_payment, context={'request': request})
 
         return Response(serializer.data)
 
@@ -55,4 +67,17 @@ class Payments(ViewSet):
         Returns:
             Response -- JSON serialized list of Payments
         """
-        pass
+        payments = PaymentType.objects.all()
+
+        attraction = self.request.query_params.get("attraction", None)
+        customer = None
+        if hasattr(request.auth, "user"):
+            customer = Customer.objects.get(user=request.auth.user)
+
+        if customer is not None:
+            payments = PaymentType.objects.filter(customer__id=customer.id)
+
+        serializer = PaymentSerializer(
+            payments, many=True, context={'request': request})
+
+        return Response(serializer.data)
