@@ -4,7 +4,9 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from saturdayintheparkapi.models import Attraction, ParkArea
+from ecommerceapi.models import PaymentType
+from .paymentserializer import PaymentSerializer
+
 
 class Payments(ViewSet):
     """Payments for Bangazon"""
@@ -15,8 +17,13 @@ class Payments(ViewSet):
         Returns:
             Response -- JSON serialized Payments instance
         """
-        pass
+        new_payment = PaymentType.objects.create(
+            name=request.data["name"]
+        )
 
+        serializer = PaymentSerializer(new_payment, context={'request': request})
+
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         """Handle GET requests for single Payments
@@ -41,7 +48,6 @@ class Payments(ViewSet):
             Response -- 200, 404, or 500 status code
         """
         pass
-
 
     def list(self, request):
         """Handle GET requests to Payments resource

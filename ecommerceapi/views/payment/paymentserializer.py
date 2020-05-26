@@ -4,19 +4,20 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from saturdayintheparkapi.models import Attraction, ParkArea
+from ecommerceapi.models import PaymentType
 
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
+class PaymentSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for Attractions
 
     Arguments:
         serializers
     """
     class Meta:
-        model = Attraction
+        model = PaymentType
         url = serializers.HyperlinkedIdentityField(
-            view_name='attraction',
+            view_name='payment_type',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'name', 'area', "imageurl")
+
+        fields = ('id', 'url', 'name')
