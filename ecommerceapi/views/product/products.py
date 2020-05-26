@@ -42,8 +42,10 @@ class Products(ViewSet):
         newproduct.location = request.data["location"]
         newproduct.image_path = request.data["image_path"]
         newproduct.created_at = request.data["created_at"]
-        newcustomer = Customer.objects.get(user = request.auth.user)
-        newproduct.customer = newcustomer
+        newproduct.product_type_id = request.data["product_type_id"]
+        newproduct.customer_id = request.data["customer_id"]
+        # newcustomer = Customer.objects.get(user = request.auth.user)
+        # newproduct.customer = newcustomer
         newproduct.save()
 
         serializer = ProductSerializer(newproduct, context={'request': request})
