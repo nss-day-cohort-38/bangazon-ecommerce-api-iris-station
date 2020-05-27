@@ -1,4 +1,4 @@
-"""View module for handling requests about attractions"""
+"""View module for handling requests about payments"""
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
@@ -8,7 +8,7 @@ from ecommerceapi.models import PaymentType
 
 
 class PaymentSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for Attractions
+    """JSON serializer for Payments
 
     Arguments:
         serializers

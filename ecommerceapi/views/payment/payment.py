@@ -1,4 +1,4 @@
-"""View module for handling requests about attractions"""
+"""View module for handling requests about Payment"""
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
@@ -69,7 +69,6 @@ class Payments(ViewSet):
         """
         payments = PaymentType.objects.all()
 
-        attraction = self.request.query_params.get("attraction", None)
         customer = None
         if hasattr(request.auth, "user"):
             customer = Customer.objects.get(user=request.auth.user)
