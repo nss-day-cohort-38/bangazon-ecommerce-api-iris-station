@@ -1,5 +1,6 @@
 from django.db import models
 from .customer import Customer
+from django.db.models import F
 from .payment_type import PaymentType
 
 class Order(models.Model):
@@ -16,3 +17,6 @@ class Order(models.Model):
   customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
   payment_type = models.ForeignKey(PaymentType, on_delete=models.DO_NOTHING, blank=True, null=True)
   created_at = models.DateTimeField()
+
+  class Meta:
+        ordering = (F('created_at').desc(nulls_last=True),)
