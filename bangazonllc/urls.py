@@ -23,13 +23,18 @@ from ecommerceapi.views import *
 router = routers.DefaultRouter(trailing_slash=False)
 # router.register(r'customers', Customers, 'customer')
 router.register(r'products', Products, 'products')
+<<<<<<< HEAD
 router.register(r'producttypes', ProductTypes, 'producttypes')
 
+=======
+router.register(r'payment_types', Payments, 'payment_types')
+>>>>>>> master
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('admin/', admin.site.urls),
     path('register/', register_user),
     path('login/', login_user),
     path('api-token-auth/', obtain_auth_token),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
