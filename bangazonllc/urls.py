@@ -20,6 +20,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from ecommerceapi.models import *
 from ecommerceapi.views import *
 
+# TODO: consistent third arguments being singular
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'customers', Customers, 'customer')
 router.register(r'products', Products, 'products')
@@ -27,7 +28,7 @@ router.register(r'producttypes', ProductTypes, 'producttypes')
 router.register(r'orders', Orders, 'order')
 router.register(r'payment_types', Payments, 'payment_types')
 router.register(r'order_products', OrderProducts, 'orderproducts')
-router.register(r'users', Users, 'users')
+router.register(r'users', Users, 'user')
 
 urlpatterns = [
     path('', include(router.urls)),

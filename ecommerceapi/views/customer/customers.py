@@ -19,13 +19,9 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
             view_name='customer',
             lookup_field='id'
         )
-        # just customer
-        fields = ('id', 'address', 'phone_number', 'user_id', "user",)
-
-        # just user
-        # fields = ('first_name', 'last_name', "last_login", "username", "email", "date_joined", "customer")
+        fields = ('id', 'address', 'phone_number', 'user_id', 'user',)
         
-        # depth = 2
+        depth = 1
         
 class Customers(ViewSet):
     """customer for Bangazon"""
@@ -36,18 +32,10 @@ class Customers(ViewSet):
         Returns:
             Response -- JSON serialized customer instance
         """
-        try:
-            # TODO: Getting the customer from the auth token 
-            # may not be the best way to go 
-            # if we end up using this as a global profile
-            
-            ## TODO: user = UserSerializer()
-            ## https://stackoverflow.com/questions/20633313/django-rest-framework-get-related-model-field-in-serializer 
+        try:            
+            # if customer id is in the url
             customer = Customer.objects.get(pk=pk) 
-            # user = User.objects.get(pk=customer.user_id)
-            # customer = Customer.objects.get(user=request.data[""])
-            
-            # customer.user = user
+
             serializer = CustomerSerializer(customer, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
