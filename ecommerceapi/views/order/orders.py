@@ -9,18 +9,21 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from ecommerceapi.models import Order, Customer
+from .. import PaymentSerializer
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     '''
         This funciton serializes an array from the db and turns it into JSON :D
     '''
+    payment_type = PaymentSerializer('payment_type')
     class Meta:
         model = Order
         url = serializers.HyperlinkedIdentityField(
             view_name = 'orders',
             lookup_field = "id"
         )
-        fields = ('id', 'payment_type_id', 'created_at')
+
+        fields = ('id', 'payment_type_id', 'created_at', 'payment_type')
         depth = 1
     
 
@@ -32,10 +35,13 @@ class Orders(ViewSet):
         This function returns all of the orders associated with the current user, (based of token). It is important to note that it is ordered
         by date so the first item returned is the most recent and if that payment type id is null than it is an open cart
         '''
+        customer = None
+        if hasattr( request.auth, "user"):
+            customer = Customer.objects.get(user=request.auth.user)
 
-        customer = Customer.objects.get(user=request.auth.user)
         orders = Order.objects.all()
-        orders = orders.filter(customer = customer)
+        if customer is not None:
+            orders = orders.filter(customer = customer)
         paymentType = self.request.query_params.get('payment_type_id', None)
         if paymentType is not None:
             orders.filter(payment_type_id = paymentType)
