@@ -10,18 +10,31 @@ from rest_framework import serializers
 from rest_framework import status
 from ecommerceapi.models import Order, Customer
 
+
+class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Customer
+        url = serializers.HyperlinkedIdentityField(
+            view_name = 'customer',
+            lookup_field = "id"
+        )
+        fields = ('id', 'address')
+        depth = 1
+
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     '''
         This funciton serializes an array from the db and turns it into JSON :D
     '''
+    customer = CustomerSerializer('customer')
     class Meta:
         model = Order
         url = serializers.HyperlinkedIdentityField(
             view_name = 'orders',
             lookup_field = "id"
         )
-        fields = ('id', 'payment_type_id', 'created_at')
-        depth = 1
+        fields = ('id', 'payment_type_id', 'created_at', 'customer')
+        # depth = 1
     
 
 class Orders(ViewSet):
