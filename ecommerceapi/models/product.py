@@ -2,8 +2,10 @@ from django.db import models
 from django.db.models import F
 from .product_type import ProductType
 from .customer import Customer
+from safedelete.models import SafeDeleteModel
+from safedelete.models import SOFT_DELETE
 
-class Product(models.Model):
+class Product(SafeDeleteModel):
   
     '''
         Product Models:
@@ -19,6 +21,9 @@ class Product(models.Model):
             created_at-- date-time field
             product_type-- foreign key for ProductType    
     '''
+
+    _safedelete_policy = SOFT_DELETE
+
     title = models.CharField(max_length=50)
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     ## TODO: Confirm: decimal_places
