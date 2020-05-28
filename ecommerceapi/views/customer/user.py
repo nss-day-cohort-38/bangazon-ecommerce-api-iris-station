@@ -36,3 +36,17 @@ class Users(ViewSet):
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
+        
+    def update(self, request, pk=None):
+        """Handle PUT requests for a user
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+        user = User.objects.get(pk=pk)
+        user.username = request.data["address"]
+        user.first_name = request.data["first_name"]
+        user.last_name = request.data["last_name"]
+        user.email = request.data["email"]
+        
+        return Response({}, status=status.HTTP_204_NO_CONTENT)

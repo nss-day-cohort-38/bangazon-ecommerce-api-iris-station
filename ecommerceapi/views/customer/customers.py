@@ -58,3 +58,15 @@ class Customers(ViewSet):
         
         except Exception as ex:
             return HttpResponseServerError(ex)
+        
+    def update(self, request, pk=None):
+        """Handle PUT requests for a customer
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+        customer = Customer.objects.get(pk=pk)
+        customer.address = request.data["address"]
+        customer.phone_number = request.data["phone_number"]
+        
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
