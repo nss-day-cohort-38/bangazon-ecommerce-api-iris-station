@@ -3,6 +3,7 @@ astroid==2.4.1
 autopep8==1.5.2
 Django==3.0.6
 django-cors-headers==3.3.0
+django-safedelete==0.5.5
 djangorestframework==3.11.0
 isort==4.3.21
 lazy-object-proxy==1.4.3
