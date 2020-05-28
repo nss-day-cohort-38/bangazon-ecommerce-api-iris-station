@@ -65,4 +65,18 @@ class OrderProducts(ViewSet):
 
         serializer = OrderProductSerializer(new_order_product, context={'request': request})
         return Response(serializer.data)
+    
+    def destroy(self, request, pk=None):
+        try:
+            orderProduct = OrderProduct.objects.get(pk=pk)
+            orderProduct.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except OrderProduct.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
