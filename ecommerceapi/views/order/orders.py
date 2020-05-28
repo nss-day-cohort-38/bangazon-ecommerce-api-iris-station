@@ -11,11 +11,24 @@ from rest_framework import status
 from ecommerceapi.models import Order, Customer
 from .. import PaymentSerializer
 
+
+class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Customer
+        url = serializers.HyperlinkedIdentityField(
+            view_name = 'customer',
+            lookup_field = "id"
+        )
+        fields = ('id', 'address')
+        depth = 1
+
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     '''
         This funciton serializes an array from the db and turns it into JSON :D
     '''
     payment_type = PaymentSerializer('payment_type')
+    customer = CustomerSerializer('customer')
     class Meta:
         model = Order
         url = serializers.HyperlinkedIdentityField(
@@ -23,8 +36,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field = "id"
         )
 
-        fields = ('id', 'payment_type_id', 'created_at', 'payment_type')
-        depth = 1
+        fields = ('id', 'payment_type_id', 'created_at', 'payment_type', "customer")
     
 
 class Orders(ViewSet):
@@ -66,7 +78,11 @@ class Orders(ViewSet):
         return Response(serialize.data)
     
 
+    def update(self, request, pk=None):
 
+        ogOrder = Order.objects.get(pk=pk)
+        ogOrder.payment_type_id = request.data['payment_type_id']
 
-
+        ogOrder.save()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
     
