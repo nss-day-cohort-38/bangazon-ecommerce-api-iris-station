@@ -7,7 +7,6 @@ from rest_framework import status
 from ecommerceapi.models import Customer
 from django.contrib.auth.models import User
 
-
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for customer
 
@@ -42,6 +41,8 @@ class Customers(ViewSet):
             # may not be the best way to go 
             # if we end up using this as a global profile
             
+            ## TODO: user = UserSerializer()
+            ## https://stackoverflow.com/questions/20633313/django-rest-framework-get-related-model-field-in-serializer 
             customer = Customer.objects.get(pk=pk) 
             # user = User.objects.get(pk=customer.user_id)
             # customer = Customer.objects.get(user=request.data[""])
