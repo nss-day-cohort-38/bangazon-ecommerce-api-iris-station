@@ -68,5 +68,6 @@ class Customers(ViewSet):
         customer = Customer.objects.get(pk=pk)
         customer.address = request.data["address"]
         customer.phone_number = request.data["phone_number"]
+        customer.save()
         
         return Response({}, status=status.HTTP_204_NO_CONTENT)
