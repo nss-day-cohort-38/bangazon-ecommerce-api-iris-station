@@ -34,9 +34,27 @@ class Customers(ViewSet):
         """
         try:            
             # if customer id is in the url
-            customer = Customer.objects.get(pk=pk) 
+            customer = Customer.objects.get(pk=pk)
 
             serializer = CustomerSerializer(customer, context={'request': request})
             return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+        
+    def list(self, request):
+        """Handle GET requests to customers resource. 
+        Used when the user is extracted from the token
+
+        Returns:
+            Response -- JSON serialized list (of one customer)
+        """
+        
+        try:
+            customer = Customer.objects.get(user=request.auth.user)
+
+            serializer = CustomerSerializer(
+                customer, many=False, context={'request': request})
+            return Response(serializer.data)
+        
         except Exception as ex:
             return HttpResponseServerError(ex)
