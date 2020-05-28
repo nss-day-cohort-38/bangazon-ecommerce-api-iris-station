@@ -73,8 +73,13 @@ class Products(ViewSet):
             return HttpResponseServerError(ex)
 
          
-    def update(self, request, pk=None): 
-        pass
+    def update(self, request, pk=None):
+         
+        ogProduct = Product.objects.get(pk=pk)
+        ogProduct.quantity = request.data['quantity']
+
+        ogProduct.save()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk=None):
         pass
