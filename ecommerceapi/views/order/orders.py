@@ -73,7 +73,11 @@ class Orders(ViewSet):
         return Response(serialize.data)
     
 
+    def update(self, request, pk=None):
 
+        ogOrder = Order.objects.get(pk=pk)
+        ogOrder.payment_type_id = request.data['payment_type_id']
 
-
+        ogOrder.save()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
     
