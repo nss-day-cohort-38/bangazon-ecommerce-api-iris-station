@@ -60,9 +60,13 @@ class Products(ViewSet):
         else:
              products = Product.objects.all()
 
+        
         user = self.request.query_params.get('user', None)
+        if hasattr(request.auth, "user"):
+            customer = Customer.objects.get(user=request.auth.user)
+
         if user is not None:
-            products = products.filter(customer_id=user)
+            products = products.filter(customer_id=customer.id)
 
         serializer = ProductSerializer(products, many=True, context={"request": request})
         return Response(serializer.data)
