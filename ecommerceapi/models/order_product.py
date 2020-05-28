@@ -14,4 +14,4 @@ class OrderProduct(models.Model):
   '''
   
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
-  product = models.ForeignKey(Product, related_name="products", on_delete=models.DO_NOTHING)
+  product = models.ForeignKey(Product, related_name="products", on_delete=models.CASCADE)

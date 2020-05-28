@@ -60,7 +60,7 @@ class Products(ViewSet):
         else:
              products = Product.objects.all()
 
-        
+        ''' handles the My Products list for each user '''
         user = self.request.query_params.get('user', None)
         if hasattr(request.auth, "user"):
             customer = Customer.objects.get(user=request.auth.user)
@@ -85,7 +85,7 @@ class Products(ViewSet):
         pass
 
     def destroy(self, request, pk=None):
-        # pass
+        '''handles delete product'''
         try:
             product = Product.objects.get(pk=pk)
             product.delete()
