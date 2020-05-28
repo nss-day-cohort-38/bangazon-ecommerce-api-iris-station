@@ -10,19 +10,36 @@ from rest_framework import serializers
 from rest_framework import status
 from ecommerceapi.models import Order, Customer, Product, OrderProduct
 
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+            model = Product
+            url = serializers.HyperlinkedIdentityField(
+                view_name='products',
+                lookup_field='id'
+            )
+            fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'created_at', 'image_path', 'product_type_id')
+    
+
 class OrderProductSerializer(serializers.HyperlinkedModelSerializer):
     '''
         This funciton serializes an array from the db and turns it into JSON :D
     '''
+    product = ProductSerializer('product')
+
     class Meta:
         model = OrderProduct
         url = serializers.HyperlinkedIdentityField(
             view_name = 'order_products',
             lookup_field = "id"
         )
-        fields = ('id', 'order_id', 'product_id')
+        fields = ('id', 'order_id', 'product')
     
 
+    """JSON serializer for products
+
+    Arguments:
+        serializers
+    """
 class OrderProducts(ViewSet):
     
     def list(self, request):
