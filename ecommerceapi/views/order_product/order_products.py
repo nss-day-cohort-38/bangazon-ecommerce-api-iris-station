@@ -17,7 +17,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
                 view_name='products',
                 lookup_field='id'
             )
-            fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'created_at', 'image_path', 'product_type_id')
+            fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'created_at', 'image_path', 'product_type_id', 'deleted')
     
 
 class OrderProductSerializer(serializers.HyperlinkedModelSerializer):
