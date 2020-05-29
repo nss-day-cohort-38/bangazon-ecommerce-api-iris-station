@@ -43,7 +43,13 @@ class Payments(ViewSet):
         Returns:
             Response -- JSON serialized Payments instance
         """
-        pass
+        try:
+            payment_type = PaymentType.objects.get(pk=pk)
+            serializer = PaymentSerializer(
+                payment_type, many=False, context={'request': request})
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
         """Handle PUT requests for a Payments
@@ -59,7 +65,17 @@ class Payments(ViewSet):
         Returns:
             Response -- 200, 404, or 500 status code
         """
-        pass
+        try:
+            paymenttype = PaymentType.objects.get(pk=pk)
+            paymenttype.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except PaymentType.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def list(self, request):
         """Handle GET requests to Payments resource

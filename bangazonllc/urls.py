@@ -26,7 +26,7 @@ router.register(r'customers', Customers, 'customer')
 router.register(r'products', Products, 'products')
 router.register(r'producttypes', ProductTypes, 'producttypes')
 router.register(r'orders', Orders, 'order')
-router.register(r'payment_types', Payments, 'payment_types')
+router.register(r'payment_types', Payments, 'paymenttypes')
 router.register(r'order_products', OrderProducts, 'orderproducts')
 router.register(r'users', Users, 'user')
 
@@ -35,6 +35,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', register_user),
     path('login/', login_user),
+    path('get_user/', get_user),
     path('api-token-auth/', obtain_auth_token),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
