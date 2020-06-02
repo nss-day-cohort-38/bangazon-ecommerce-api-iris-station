@@ -7,6 +7,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
+from django.core.files.base import ContentFile
 from ecommerceapi.models import Product, Customer
 from datetime import datetime
 
@@ -25,6 +26,8 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'created_at', 'image_path', 'product_type_id')
         depth = 1
 
+#FIXME: Create an Image serializer?
+
 class Products(ViewSet):
 
     '''' a class to handle all the products viewset
@@ -41,7 +44,8 @@ class Products(ViewSet):
         newproduct.description = request.data["description"]
         newproduct.quantity = request.data["quantity"]
         newproduct.location = request.data["location"]
-        newproduct.image_path = request.data["image_path"]
+        # FIXME: Figure this out
+        newproduct.image_path = ContentFile(data.read())
         newproduct.created_at = datetime.today().strftime('%Y-%m-%d')
         newproduct.product_type_id = request.data["product_type_id"]
         newcustomer = Customer.objects.get(user = request.auth.user)
