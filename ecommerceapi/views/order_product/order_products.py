@@ -87,7 +87,7 @@ class OrderProducts(ViewSet):
             prodCount = self.request.query_params.get('count', None)
             if prodCount is not None:
 
-                op = OrderProduct.objects.raw('''SELECT 
+                count = OrderProduct.objects.raw('''SELECT 
                 op.id opId,
                 op.order_id,
                 op.product_id,
@@ -97,7 +97,7 @@ class OrderProducts(ViewSet):
                 left join ecommerceapi_order o on  op.order_id = o.id
                 where o.payment_type_id Not NULL and product_id = ?
                 order by product_id''',
-                (count,))
+                (prodCount,))
 
             else:
                 serializer = OrderProductSerializer(op, context={'request':request})
