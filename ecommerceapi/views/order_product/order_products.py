@@ -9,7 +9,6 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from ecommerceapi.models import Order, Customer, Product, OrderProduct
-import sqlite3
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
@@ -87,20 +86,18 @@ class OrderProducts(ViewSet):
 
             prodCount = self.request.query_params.get('count', None)
             if prodCount is not None:
-                with sqlite3.connect
 
                 op = OrderProduct.objects.raw('''SELECT 
-                    op.id opId,
-                    op.order_id,
-                    op.product_id,
-                    o.id,
-                    o.created_at,
-                    COUNT(product_id) productCount
-                    from ecommerceapi_orderproduct op 
-                    left join ecommerceapi_order o on  op.order_id = o.id
-                    where o.payment_type_id Not NULL and product_id = ?
-                    group by product_id''',
-                    (pk,))
+                op.id opId,
+                op.order_id,
+                op.product_id,
+                o.id,
+                o.created_at
+                from ecommerceapi_orderproduct op 
+                left join ecommerceapi_order o on  op.order_id = o.id
+                where o.payment_type_id Not NULL and product_id = ?
+                order by product_id''',
+                (count,))
 
             else:
                 serializer = OrderProductSerializer(op, context={'request':request})
