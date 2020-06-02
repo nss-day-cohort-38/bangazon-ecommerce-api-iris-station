@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from ecommerceapi.models import Order, Customer, Product, OrderProduct
+import sqlite3
+
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -85,6 +87,8 @@ class OrderProducts(ViewSet):
 
             prodCount = self.request.query_params.get('count', None)
             if prodCount is not None:
+                with sqlite3.connect
+
                 op = OrderProduct.objects.raw('''SELECT 
                     op.id opId,
                     op.order_id,

@@ -32,3 +32,6 @@ media/
 
 # django migrations
 migrations
+
+#db connection
+.connection
