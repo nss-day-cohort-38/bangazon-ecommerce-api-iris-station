@@ -1,1 +1,0 @@
-connection = "/Users/kurt/workspace/bangazon/2_bangazon/bangazon-ecommerce-api-iris-station/db.sqlite3"

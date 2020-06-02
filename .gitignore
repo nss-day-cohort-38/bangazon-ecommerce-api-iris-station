@@ -34,4 +34,5 @@ media/
 migrations
 
 #db connection
-.connection
+connection.py
+
