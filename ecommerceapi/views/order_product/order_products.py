@@ -78,5 +78,31 @@ class OrderProducts(ViewSet):
 
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def retrieve(self, request, pk=None):
+        try:
+            op = OrderProduct.objects.get(pk=pk)
+
+            prodCount = self.request.query_params.get('count', None)
+            if prodCount is not None:
+                op = OrderProduct.objects.raw('''SELECT 
+                    op.id opId,
+                    op.order_id,
+                    op.product_id,
+                    o.id,
+                    o.created_at,
+                    COUNT(product_id) productCount
+                    from ecommerceapi_orderproduct op 
+                    left join ecommerceapi_order o on  op.order_id = o.id
+                    where o.payment_type_id Not NULL and product_id = ?
+                    group by product_id''',
+                    (pk,))
+
+            else:
+                serializer = OrderProductSerializer(op, context={'request':request})
+
+                return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
     
 
