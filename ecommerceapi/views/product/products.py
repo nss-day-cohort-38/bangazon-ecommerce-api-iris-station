@@ -68,6 +68,13 @@ class Products(ViewSet):
         if user is not None:
             products = products.filter(customer_id=customer.id)
 
+
+        ''' handles fetching list of all products of a certain product type '''
+        product_type_id = self.request.query_params.get('productTypeId', None)
+        if product_type_id is not None:
+            products = products.filter(product_type_id=product_type_id)
+
+
         serializer = ProductSerializer(products, many=True, context={"request": request})
         return Response(serializer.data)
     
