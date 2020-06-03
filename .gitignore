@@ -36,3 +36,7 @@ migrations
 #db connection
 connection.py
 
+#fixture images
+!calligraphy.jpg
+!dogcollar.jpg
+!teatowels.jpg
