@@ -19,11 +19,6 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     order_count = serializers.SerializerMethodField()
     open_order_count = serializers.SerializerMethodField()
 
-# def get_order_count(self, obj):
-#         return Order.objects.filter(customer__id=obj.id).count()
-
-#     def get_open_order_count(self, obj):
-#         return Order.objects.filter(customer__id=obj.id).filter(payment_type=None).count()
     def get_order_count(self, obj):
         return (obj.order_count if hasattr(obj, "order_count") else None)
 
@@ -53,7 +48,7 @@ class Customers(ViewSet):
         """
         try:
             # if customer id is in the url
-            customer = Customer.objects.annotate(order_count=Count("order")).annotate(open_order_count=Count('order', filter=Q(order__payment_type=None))).get(pk=pk)
+            customer = Customer.objects.get(pk=pk)
 
             serializer = CustomerSerializer(
                 customer, context={'request': request})
@@ -70,21 +65,21 @@ class Customers(ViewSet):
         """
 
         try:
-
+            many = True
             customer = Customer.objects.all()
             multiple_open = self.request.query_params.get('multiple_open', None)
-
-            if hasattr(request.auth, "user"):
-                customer = Customer.objects.get(user=request.auth.user)
-
 
             customer = customer.annotate(order_count=Count("order")).annotate(open_order_count=Count('order', filter=Q(order__payment_type=None)))
 
             if multiple_open is not None:
                 customer = customer.filter(open_order_count__gt=1)
 
+            if hasattr(request.auth, "user"):
+                many = False
+                customer = customer.get(user=request.auth.user)
+
             serializer = CustomerSerializer(
-                customer, many=True, context={'request': request})
+                customer, many=many, context={'request': request})
 
             return Response(serializer.data)
         except Exception as ex:

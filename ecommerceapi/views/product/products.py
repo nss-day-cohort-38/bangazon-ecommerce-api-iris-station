@@ -7,7 +7,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from ecommerceapi.models import Product, Customer
+from ecommerceapi.models import Product, Customer, OrderProduct
 from datetime import datetime
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
@@ -22,7 +22,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             view_name='products',
             lookup_field='id'
         )
-        fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'created_at', 'image_path', 'product_type_id')
+        fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'created_at', 'image_path', 'product_type_id', 'amount_sold')
         depth = 1
 
 class Products(ViewSet):
@@ -67,6 +67,27 @@ class Products(ViewSet):
 
         if user is not None:
             products = products.filter(customer_id=customer.id)
+
+        
+        #this loop will count how many products are in the order_product table specifically ones where the paymenttypeid is not null 
+        # meaning the user has paid for the product.
+        for product in products:
+
+
+            productsSold = OrderProduct.objects.raw('''SELECT 
+            op.id opId,
+            op.order_id,
+            op.product_id,
+            o.id,
+            o.created_at
+            from ecommerceapi_orderproduct op 
+            left join ecommerceapi_order o on  op.order_id = o.id
+            where o.payment_type_id Not NULL and product_id = %s
+            order by product_id''',
+            [product.id])
+
+            count = len(list(productsSold))
+            product.amount_sold = count
 
         serializer = ProductSerializer(products, many=True, context={"request": request})
         return Response(serializer.data)

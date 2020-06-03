@@ -15,28 +15,15 @@ class TestCustomers(TestCase):
             username=self.username_1, password=self.password_1)
         self.token_1 = Token.objects.create(user=self.user_1)
 
-        
-
         self.username_2 = "TestUser2"
         self.password_2 = "testword2"
-
         self.user_2 = User.objects.create_user(
             username=self.username_2, password=self.password_2)
-
         self.token_2 = Token.objects.create(user=self.user_2)
-        # self.paymenttype_2 = PaymentType.objects.create(
-        #     merchant_name="Merchant Name",
-        #     account_number="123456789",
-        #     expiration_date="2028-02-18",
-        #     customer_id=2,
-        #     created_at="2020-05-29T14:42:51.221420Z"
-        # )
 
     def testOrderCount(self):
         Customer.objects.create(
             user_id=1, address="111 test road", phone_number="5555555555")
-
-        
 
         response = self.client.get('/customers')
 
