@@ -23,9 +23,10 @@ bangazonEnv/
 .vscode
 bangzonEnv/
 
+#other 
 .DS_Store
 *.sqlite3
-media/
+media/*
 *.pyc
 *.db
 *.pid
@@ -35,8 +36,3 @@ migrations
 
 #db connection
 connection.py
-
-#fixture images
-!calligraphy.jpg
-!dogcollar.jpg
-!teatowels.jpg
