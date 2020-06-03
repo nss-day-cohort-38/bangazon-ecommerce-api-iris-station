@@ -31,10 +31,9 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
     '''
     payment_type = PaymentSerializer('payment_type')
     customer = CustomerSerializer('customer')
-    open_count = serializers.SerializerMethodField()
+    
 
-    def get_open_count(self, obj):
-        return (obj.open_count if hasattr(obj, "open_count") else None)
+    
 
     class Meta:
         model = Order
@@ -44,7 +43,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
         )
 
         fields = ('id', 'payment_type_id', 'created_at',
-                  'payment_type', "customer", "open_count")
+                  'payment_type', "customer", "order_count")
 
 
 class Orders(ViewSet):
@@ -55,7 +54,7 @@ class Orders(ViewSet):
         by date so the first item returned is the most recent and if that payment type id is null than it is an open cart
         '''
         open = self.request.query_params.get('open', None)
-        open_count = self.request.query_params.get('open_count', None)
+        order_count = self.request.query_params.get('order_count', None)
 
         customer = None
         if hasattr(request.auth, "user"):
@@ -68,7 +67,7 @@ class Orders(ViewSet):
         if open is not None:
             orders = orders.filter(payment_type__isnull=True)
 
-        if open_count is not None:
+        if order_count is not None:
             newDict = {}
             for order in orders:
                 customer_id = order.customer.id
@@ -81,8 +80,8 @@ class Orders(ViewSet):
                 When(customer=k, then=v) for k, v in newDict.items()
             ]
 
-            orders = orders.annotate(open_count=Case(
-                *whens, default=0, output_field=IntegerField())).filter(open_count__gt=1)
+            orders = orders.annotate(order_count=Case(
+                *whens, default=0, output_field=IntegerField())).filter(order_count__gt=1)
 
         paymentType = self.request.query_params.get('payment_type_id', None)
 
