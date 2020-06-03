@@ -27,18 +27,18 @@ class TestProducts(TestCase):
             quantity=4, 
             location="Nashville",
             image_path="https://upload.wikimedia.org/wikipedia/en/7/70/Furby_picture.jpg",
-            created_at="2020-06-03 00:00:00",
+            created_at="2020-06-03 00:00:00Z",
             product_type_id = 1)
         pt = PaymentType.objects.create(
             merchant_name="Stupid Company", 
             account_number="1234123412341234", 
             expiration_date="2024-01-01", 
             customer_id=1, 
-            created_at="2020-05-27 15:08:30.518598")
+            created_at="2020-05-27 15:08:30.518598Z")
         order = Order.objects.create(
             customer_id = 1, 
             payment_type_id=1, 
-            created_at="2020-05-29 16:29:18.874982")
+            created_at="2020-05-29 16:29:18.874982Z")
         order_product = OrderProduct.objects.create(order_id = 1, product_id = 1)
         order_product_two = OrderProduct.objects.create(order_id = 1, product_id = 1)
         
