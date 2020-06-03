@@ -68,7 +68,11 @@ class Products(ViewSet):
         if user is not None:
             products = products.filter(customer_id=customer.id)
 
+        
+        #this loop will count how many products are in the order_product table specifically ones where the paymenttypeid is not null 
+        # meaning the user has paid for the product.
         for product in products:
+
 
             productsSold = OrderProduct.objects.raw('''SELECT 
             op.id opId,
@@ -84,10 +88,6 @@ class Products(ViewSet):
 
             count = len(list(productsSold))
             product.amount_sold = count
-
-            # serializer = OrderProductSerializer(order_products, many=False, context={'request': request})
-            # print(serializer.data)
-            # return Response(serializer.data)
 
         serializer = ProductSerializer(products, many=True, context={"request": request})
         return Response(serializer.data)
