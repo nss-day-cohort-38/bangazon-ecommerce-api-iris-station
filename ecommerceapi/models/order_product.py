@@ -10,6 +10,7 @@ class OrderProduct(models.Model):
     Arguments Required:
         order= ForeignKey for Order
         product= ForeignKey for Product
+        
           
   '''
   
