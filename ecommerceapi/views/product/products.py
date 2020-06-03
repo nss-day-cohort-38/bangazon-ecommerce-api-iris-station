@@ -44,8 +44,9 @@ class Products(ViewSet):
         newproduct.description = request.data["description"]
         newproduct.quantity = request.data["quantity"]
         newproduct.location = request.data["location"]
-        # FIXME: Figure this out
-        newproduct.image_path = ContentFile(data.read())
+        # "When Django handles a file upload, the file data ends up placed in request.FILES"
+        # https://docs.djangoproject.com/en/3.0/topics/http/file-uploads/
+        newproduct.image_path = request.FILES["image_path"]
         newproduct.created_at = datetime.today().strftime('%Y-%m-%d')
         newproduct.product_type_id = request.data["product_type_id"]
         newcustomer = Customer.objects.get(user = request.auth.user)
