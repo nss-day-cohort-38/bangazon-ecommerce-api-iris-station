@@ -4,7 +4,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from ecommerceapi.models import Customer
+from ecommerceapi.models import Customer, Order
 from django.contrib.auth.models import User
 
 
@@ -18,10 +18,10 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     open_order_count = serializers.SerializerMethodField()
 
     def get_order_count(self, obj):
-        return (obj.order_count if hasattr(obj, "order_count") else None)
+        return Order.objects.filter(customer__id=obj.id).count()
 
     def get_open_order_count(self, obj):
-        return (obj.open_order_count if hasattr(obj, "open_order_count") else None)
+        return Order.objects.filter(customer__id=obj.id).filter(payment_type=None).count()
 
     class Meta:
         model = Customer
@@ -62,20 +62,19 @@ class Customers(ViewSet):
             Response -- JSON serialized list (of one customer)
         """
 
-        # try:
+        try:
+            customer = Customer.objects.all()
 
-        customer = Customer.objects.all()
+            if hasattr(request.auth, "user"):
+                customer = Customer.objects.get(user=request.auth.user)
 
-        if hasattr(request.auth, "user"):
-            customer = Customer.objects.get(user=request.auth.user)
+            serializer = CustomerSerializer(
+                customer, many=True, context={'request': request})
 
-        serializer = CustomerSerializer(
-            customer, many=True, context={'request': request})
+            return Response(serializer.data)
 
-        return Response(serializer.data)
-
-        # except Exception as ex:
-        #     return HttpResponseServerError(ex)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
         """Handle PUT requests for a customer
@@ -89,3 +88,4 @@ class Customers(ViewSet):
         customer.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+

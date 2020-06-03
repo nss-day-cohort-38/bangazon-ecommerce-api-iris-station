@@ -28,9 +28,9 @@ class TestCustomers(TestCase):
             user_id=1, address="111 test road", phone_number="5555555555")
 
         response = self.client.get('/customers')
-
+        
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]["order_count"], None)
+        self.assertEqual(response.data[0]["order_count"], 0)
 
         new_order = Order.objects.create(
             customer_id=1,
@@ -44,10 +44,15 @@ class TestCustomers(TestCase):
             created_at="2020-05-29T14:42:51.221420Z"
         )
 
-        response = self.client.get('/customers')
+        new_order = Order.objects.create(
+            customer_id=1,
+            payment_type_id=1,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
 
+        response = self.client.get('/customers')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]["order_count"], 2)
+        self.assertEqual(response.data[0]["order_count"], 3)
 
     def testOpenOrderCount(self):
         Customer.objects.create(
@@ -56,24 +61,36 @@ class TestCustomers(TestCase):
         response = self.client.get('/customers')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]["open_order_count"], None)
+        self.assertEqual(response.data[0]["open_order_count"], 0)
 
-        new_order = Order.objects.create(
+        Order.objects.create(
             customer_id=1,
             payment_type_id=None,
             created_at="2020-05-29T14:42:51.221420Z"
         )
 
-        new_order = Order.objects.create(
+        Order.objects.create(
             customer_id=1,
             payment_type_id=1,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+
+        Order.objects.create(
+            customer_id=1,
+            payment_type_id=1,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+
+        Order.objects.create(
+            customer_id=1,
+            payment_type_id=None,
             created_at="2020-05-29T14:42:51.221420Z"
         )
 
         response = self.client.get('/customers')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]["open_order_count"], 1)
+        self.assertEqual(response.data[0]["open_order_count"], 2)
 
 
 

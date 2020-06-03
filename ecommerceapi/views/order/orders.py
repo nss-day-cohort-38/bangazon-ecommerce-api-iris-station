@@ -43,7 +43,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
         )
 
         fields = ('id', 'payment_type_id', 'created_at',
-                  'payment_type', "customer", "order_count")
+                  'payment_type', "customer")
 
 
 class Orders(ViewSet):
@@ -53,8 +53,6 @@ class Orders(ViewSet):
         This function returns all of the orders associated with the current user, (based of token). It is important to note that it is ordered
         by date so the first item returned is the most recent and if that payment type id is null than it is an open cart
         '''
-        open = self.request.query_params.get('open', None)
-        order_count = self.request.query_params.get('order_count', None)
 
         customer = None
         if hasattr(request.auth, "user"):
@@ -63,25 +61,6 @@ class Orders(ViewSet):
         orders = Order.objects.all()
         if customer is not None:
             orders = orders.filter(customer=customer)
-
-        if open is not None:
-            orders = orders.filter(payment_type__isnull=True)
-
-        if order_count is not None:
-            newDict = {}
-            for order in orders:
-                customer_id = order.customer.id
-                if customer_id in newDict:
-                    newDict[customer_id] += 1
-                else:
-                    newDict[customer_id] = 1
-                    
-            whens = [
-                When(customer=k, then=v) for k, v in newDict.items()
-            ]
-
-            orders = orders.annotate(order_count=Case(
-                *whens, default=0, output_field=IntegerField())).filter(order_count__gt=1)
 
         paymentType = self.request.query_params.get('payment_type_id', None)
 
