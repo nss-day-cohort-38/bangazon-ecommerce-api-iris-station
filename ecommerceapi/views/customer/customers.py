@@ -6,6 +6,8 @@ from rest_framework import serializers
 from rest_framework import status
 from ecommerceapi.models import Customer, Order
 from django.contrib.auth.models import User
+from django.db.models import Count, F, When, Case, IntegerField, Q
+
 
 
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
@@ -17,11 +19,16 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     order_count = serializers.SerializerMethodField()
     open_order_count = serializers.SerializerMethodField()
 
+# def get_order_count(self, obj):
+#         return Order.objects.filter(customer__id=obj.id).count()
+
+#     def get_open_order_count(self, obj):
+#         return Order.objects.filter(customer__id=obj.id).filter(payment_type=None).count()
     def get_order_count(self, obj):
-        return Order.objects.filter(customer__id=obj.id).count()
+        return (obj.order_count if hasattr(obj, "order_count") else None)
 
     def get_open_order_count(self, obj):
-        return Order.objects.filter(customer__id=obj.id).filter(payment_type=None).count()
+        return (obj.open_order_count if hasattr(obj, "open_order_count") else None)
 
     class Meta:
         model = Customer
@@ -46,7 +53,7 @@ class Customers(ViewSet):
         """
         try:
             # if customer id is in the url
-            customer = Customer.objects.get(pk=pk)
+            customer = Customer.objects.annotate(order_count=Count("order")).annotate(open_order_count=Count('order', filter=Q(order__payment_type=None))).get(pk=pk)
 
             serializer = CustomerSerializer(
                 customer, context={'request': request})
@@ -63,16 +70,23 @@ class Customers(ViewSet):
         """
 
         try:
+
             customer = Customer.objects.all()
+            multiple_open = self.request.query_params.get('multiple_open', None)
 
             if hasattr(request.auth, "user"):
                 customer = Customer.objects.get(user=request.auth.user)
+
+
+            customer = customer.annotate(order_count=Count("order")).annotate(open_order_count=Count('order', filter=Q(order__payment_type=None)))
+
+            if multiple_open is not None:
+                customer = customer.filter(open_order_count__gt=1)
 
             serializer = CustomerSerializer(
                 customer, many=True, context={'request': request})
 
             return Response(serializer.data)
-
         except Exception as ex:
             return HttpResponseServerError(ex)
 
