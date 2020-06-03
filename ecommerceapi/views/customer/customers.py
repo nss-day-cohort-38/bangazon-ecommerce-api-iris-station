@@ -16,7 +16,10 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     Arguments:
         serializers
     """
+    # Will hold the value of how many orders a customer has (open and closed)
     order_count = serializers.SerializerMethodField()
+
+    # Will hold the value of how many open orders a customer has
     open_order_count = serializers.SerializerMethodField()
 
     def get_order_count(self, obj):
@@ -69,8 +72,10 @@ class Customers(ViewSet):
             customer = Customer.objects.all()
             multiple_open = self.request.query_params.get('multiple_open', None)
 
+            # Adds order_count and oopen_order_count to api object
             customer = customer.annotate(order_count=Count("order")).annotate(open_order_count=Count('order', filter=Q(order__payment_type=None)))
 
+            # Filter to only show customers with multiple open orders   
             if multiple_open is not None:
                 customer = customer.filter(open_order_count__gt=1)
 
