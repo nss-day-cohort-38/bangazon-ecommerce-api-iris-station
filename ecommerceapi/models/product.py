@@ -30,9 +30,6 @@ class Product(SafeDeleteModel):
     description = models.CharField(max_length=255)
     quantity = models.IntegerField()
     location = models.CharField(max_length=75)
-    # Pre-Upload:
-    # image_path = models.CharField(max_length=255)
-    # FIXME: Figure this out
     image_path = models.ImageField()
     created_at = models.DateTimeField() 
     product_type = models.ForeignKey(ProductType, on_delete=models.DO_NOTHING)

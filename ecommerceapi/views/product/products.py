@@ -26,8 +26,6 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'title', 'price', 'description', 'quantity', "location", 'created_at', 'image_path', 'product_type_id')
         depth = 1
 
-#FIXME: Create an Image serializer?
-
 class Products(ViewSet):
 
     '''' a class to handle all the products viewset
