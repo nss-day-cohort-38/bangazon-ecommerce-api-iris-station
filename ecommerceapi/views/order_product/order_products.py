@@ -10,6 +10,7 @@ from rest_framework import serializers
 from rest_framework import status
 from ecommerceapi.models import Order, Customer, Product, OrderProduct
 
+
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
             model = Product
@@ -52,7 +53,10 @@ class OrderProducts(ViewSet):
         order_id = self.request.query_params.get('order_id', None)
         if order_id is not None:
             order_products = order_products.filter(order_id = order_id)
-        serializer = OrderProductSerializer(order_products, many=True, context={'request': request})
+            serializer = OrderProductSerializer(order_products, many=True, context={'request': request})
+        
+        else:
+            serializer = OrderProductSerializer(order_products, many=True, context={'request': request})
 
         return Response(serializer.data)
     

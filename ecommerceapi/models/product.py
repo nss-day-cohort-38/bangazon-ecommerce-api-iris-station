@@ -33,6 +33,7 @@ class Product(SafeDeleteModel):
     image_path = models.ImageField()
     created_at = models.DateTimeField() 
     product_type = models.ForeignKey(ProductType, on_delete=models.DO_NOTHING)
+    amount_sold = 0
 
     def __str__(self):
         return f'{self.title}'
