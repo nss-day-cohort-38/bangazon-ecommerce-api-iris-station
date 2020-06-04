@@ -5,19 +5,33 @@ This is the back-end counterpart to the full-stack [Bangazon eCommerce Web App](
 # Project Setup
 
 1. Clone the repo and cd into it:
+
     `git clone git@github.com:nss-day-cohort-38/bangazon-ecommerce-api-iris-station.git && cd $_`
+
 1. Set up your virtual environment:
+
     `python -m venv bangazonEnv`
+
 1. Activate virtual environment:
+
     `source ./bangazonEnv/bin/activate`
+
 1. Install dependencies:
+
     `pip install -r requirements.txt`
+
 1. Run migrations:
+
     `python manage.py migrate`
+
 1. Load fixtures:
+
     `python manage.py loaddata */fixtures/*.json`
+
 1. Start the API server:
+
     `python manage.py runserver`
+    
 1. Follow the [steps on the front-end web app readme](https://github.com/nss-day-cohort-38/bangazon-ecommerce-web-app-iris-station) to view the web app in your browser
 
 ## Technology Utilized
