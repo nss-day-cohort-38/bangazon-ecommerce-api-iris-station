@@ -19,6 +19,9 @@ from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 from ecommerceapi.models import *
 from ecommerceapi.views import *
+from django.views.static import serve
+from django.conf import settings
+from django.conf.urls.static import static
 
 # TODO: consistent third arguments being singular
 router = routers.DefaultRouter(trailing_slash=False)
@@ -38,4 +41,4 @@ urlpatterns = [
     path('get_user/', get_user),
     path('api-token-auth/', obtain_auth_token),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

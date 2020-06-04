@@ -17,7 +17,7 @@ class Product(SafeDeleteModel):
             description-- character field
             quantity-- integer field
             location-- character field
-            image_path-- character field
+            image_path-- ImageField
             created_at-- date-time field
             product_type-- foreign key for ProductType    
     '''
@@ -26,12 +26,11 @@ class Product(SafeDeleteModel):
 
     title = models.CharField(max_length=50)
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
-    ## TODO: Confirm: decimal_places
     price = models.DecimalField(max_digits=7, decimal_places=2)
     description = models.CharField(max_length=255)
     quantity = models.IntegerField()
     location = models.CharField(max_length=75)
-    image_path = models.CharField(max_length=255)
+    image_path = models.ImageField(blank=True, null=True)
     created_at = models.DateTimeField() 
     product_type = models.ForeignKey(ProductType, on_delete=models.DO_NOTHING)
     amount_sold = 0
