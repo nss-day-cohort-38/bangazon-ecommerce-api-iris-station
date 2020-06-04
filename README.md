@@ -22,6 +22,7 @@ This is the back-end counterpart to the full-stack [Bangazon eCommerce Web App](
 
 1. Run migrations:
 
+    `python manage.py makemigrations`
     `python manage.py migrate`
 
 1. Load fixtures:
@@ -31,7 +32,7 @@ This is the back-end counterpart to the full-stack [Bangazon eCommerce Web App](
 1. Start the API server:
 
     `python manage.py runserver`
-    
+
 1. Follow the [steps on the front-end web app readme](https://github.com/nss-day-cohort-38/bangazon-ecommerce-web-app-iris-station) to view the web app in your browser
 
 ## Technology Utilized
