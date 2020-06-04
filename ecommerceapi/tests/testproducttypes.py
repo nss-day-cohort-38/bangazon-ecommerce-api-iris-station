@@ -5,60 +5,61 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from unittest import skip
 import unittest
-
+import django.contrib.sites.requests
 
 
 class TestProductTypes(TestCase):
     def setUp(self):
         self.username = "TestUser"
         self.password = "testword1"
-        self.user = User.objects.create_user(
-            username=self.username, password=self.password)
+        self.user = User.objects.create_user(username=self.username, password=self.password)
         self.token = Token.objects.create(user=self.user)
-        self.customer = Customer.objects.create(
-            user_id=1, address="111 test road", phone_number="5555555555")
-
-    def test_list_product(self):
-        new_product = Product.objects.create(
+        self.customer = Customer.objects.create(user_id=1, address="111 test road", phone_number="5555555555")
+        self.new_watch_instance = ProductType.objects.create(id=4, name="Watches")
+        self.new_watch = Product.objects.create(
             title="Rolex",
             customer_id=1,
             price=3.00,
-            description="Ball out",
-            quantity=4, 
+            description="Ball Out",
+            quantity=4,
             location="Nashville",
-            image_path="https://upload.wikimedia.org/wikipedia/en/7/70/Furby_picture.jpg",
+            image_path="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQco0Tx9CnodcYY1PdeAzv6hw2EvWKPMv-TD9A3ig3T5o9TIvhz0yALZ3mzuLc2vkFOZ0IndIU&usqp=CAc",
             created_at="2020-06-03 00:00:00Z",
-            product_type_id=1
-        )
-        watches = ProductType.objects.create(name="Watches")
-        payment_type = PaymentType.objects.create(
-            merchant_name="Stupid Company", 
-            account_number="1234123412341234", 
-            expiration_date="2024-01-01", 
-            customer_id=1, 
-            created_at="2020-05-27 15:08:30.518598Z")
-        order = Order.objects.create(
-            customer_id = 1, 
-            payment_type_id=1, 
-            created_at="2020-05-29 16:29:18.874982Z")
+            product_type_id=4)
 
-        response = self.client.get(reverse('products-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        # self.assertEqual(response.data[0]["amount_sold"], 2)
-
-
-
-         #Use the client to send the request and store the response
-        # response = self.client.post(reverse('products-form'), new_product)
-        # self.assertEqual(response.status_code, 200)
 
     def test_list_product_type(self):
         watches = ProductType.objects.create(name="Watches")
-        response = self.client.get(reverse('producttypes-list'), HTTP_AUTHORIZATION='Token' + str(self.token))
+        response = self.client.get(
+            reverse('producttypes-list'), HTTP_AUTHORIZATION='Token' + str(self.token))
         self.assertEqual(response.status_code, 200)
-        # self.assertEqual(len(response.context['producttypes-list']), 1)
         self.assertIn(watches.name.encode(), response.content)
+
+    def test_post_producttype(self):
+
+        # new_product_watch = {
+        #     "title": "Rolex",
+        #     "customer_id": 1,
+        #     "price": 3.00,
+        #     "description": "Ball out",
+        #     "quantity": 4,
+        #     "location": "Nashville",
+        #     "image_path": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQco0Tx9CnodcYY1PdeAzv6hw2EvWKPMv-TD9A3ig3T5o9TIvhz0yALZ3mzuLc2vkFOZ0IndIU&usqp=CAc",
+        #     "created_at": "2020-06-03 00:00:00Z",
+        #     "product_type_id": 4
+        # }
+        test_new_watch = {
+            "name": "Watches",
+        }
+
+        # response = self.client.post('products/form', kwargs={'pk': self.new_watch.pk})
+        # response = self.client.post((reverse('product/form'), HTTP_AUTHORIZATION = 'Token' + str(self.token)))
+        response = self.client.post('product/form', test_new_watch, HTTP_AUTHORIZATION = 'Token' + str(self.token))
+        self.assertEqual(response.status_code, 200)
+
+        # response = self.client.get(reverse('producttypes-list'), HTTP_AUTHORIZATION='Token' + str(self.token))
+        # self.assertEqual(response.status_code, 200)
+
 
 if __name__ == '__main__':
     unittest.main()
