@@ -30,7 +30,7 @@ class Product(SafeDeleteModel):
     description = models.CharField(max_length=255)
     quantity = models.IntegerField()
     location = models.CharField(max_length=75)
-    image_path = models.ImageField(default=None, blank=True, null=True)
+    image_path = models.ImageField(blank=True, null=True)
     created_at = models.DateTimeField() 
     product_type = models.ForeignKey(ProductType, on_delete=models.DO_NOTHING)
     amount_sold = 0
