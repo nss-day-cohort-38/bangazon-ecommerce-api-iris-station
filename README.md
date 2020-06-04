@@ -1,6 +1,7 @@
 # Bangazon Django App Project Setup
 
-1. Clone down the repo and `cd` into it
+1. Clone the repo and cd into it:
+    `git clone git@github.com:nss-day-cohort-38/bangazon-ecommerce-api-iris-station.git && cd $_`
 1. Set up your virtual environment:
     `python -m venv bangazonEnv`
 1. Activate virtual environment:

@@ -42,6 +42,7 @@ class Products(ViewSet):
         newproduct.description = request.data["description"]
         newproduct.quantity = request.data["quantity"]
         newproduct.location = request.data["location"]
+        # Keith:
         # If a user is uploading a file, 
         # assign it, otherwise skip this and allow it to be null
         if request.FILES:
