@@ -8,16 +8,27 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from django.core.files.base import ContentFile
-from ecommerceapi.models import Product, Customer, OrderProduct
+from ecommerceapi.models import Product, Customer, OrderProduct, ProductType
 from datetime import datetime
 
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for products
 
-    Arguments:
-        serializers
-    """
+
+class ProductTypeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ProductType
+        url = serializers.HyperlinkedIdentityField(
+            view_name='producttypes',
+            lookup_field='id'
+        )
+        fields = ('id', 'name',)
+        depth = 1
+
+
+
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
+
+    product_type = ProductTypeSerializer('product_type')
     class Meta:
         model = Product
         url = serializers.HyperlinkedIdentityField(
@@ -25,7 +36,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'title', 'price', 'description', 'quantity', "location",
-                  'created_at', 'image_path', 'product_type_id', 'amount_sold')
+                  'created_at', 'image_path', 'product_type_id', 'amount_sold', 'product_type')
         depth = 1
 
 
