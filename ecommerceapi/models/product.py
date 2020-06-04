@@ -29,7 +29,7 @@ class Product(SafeDeleteModel):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     description = models.CharField(max_length=255)
     quantity = models.IntegerField()
-    location = models.CharField(max_length=75)
+    location = models.CharField(max_length=75, null=True, blank=True)
     image_path = models.ImageField(blank=True, null=True)
     created_at = models.DateTimeField() 
     product_type = models.ForeignKey(ProductType, on_delete=models.DO_NOTHING)
