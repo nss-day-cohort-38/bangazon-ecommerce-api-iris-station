@@ -9,7 +9,7 @@
       "price": 33.84,
       "quantity": 87,
       "location": "San Francisco",
-      "image_path": "http://dummyimage.com/149x138.jpg/cc0000/ffffff",
+      "image_path": "calligraphy.jpg",
       "created_at": "2020-01-11",
       "product_type_id": 3
     }
@@ -24,7 +24,7 @@
       "price": 18.20,
       "quantity": 71,
       "location": "Chicago",
-      "image_path": "http://dummyimage.com/126x237.bmp/cc0000/ffffff",
+      "image_path": "teatowels.jpg",
       "created_at": "2019-08-12",
       "product_type_id": 1
     }
@@ -39,7 +39,7 @@
       "price": 22.60,
       "quantity": 47,
       "location": "Dubai",
-      "image_path": "http://dummyimage.com/189x168.png/5fa2dd/ffffff",
+      "image_path": "dogcollar.jpg",
       "created_at": "2020-01-18",
       "product_type_id": 2
     }

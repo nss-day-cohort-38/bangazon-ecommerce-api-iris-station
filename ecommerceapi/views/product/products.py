@@ -7,6 +7,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
+from django.core.files.base import ContentFile
 from ecommerceapi.models import Product, Customer, OrderProduct
 from datetime import datetime
 
@@ -41,7 +42,12 @@ class Products(ViewSet):
         newproduct.description = request.data["description"]
         newproduct.quantity = request.data["quantity"]
         newproduct.location = request.data["location"]
-        newproduct.image_path = request.data["image_path"]
+        # If a user is uploading a file, 
+        # assign it, otherwise skip this and allow it to be null
+        if request.FILES:
+        # "When Django handles a file upload, the file data ends up placed in request.FILES"
+        # https://docs.djangoproject.com/en/3.0/topics/http/file-uploads/
+            newproduct.image_path = request.FILES["image_path"]
         newproduct.created_at = datetime.today().strftime('%Y-%m-%d')
         newproduct.product_type_id = request.data["product_type_id"]
         newcustomer = Customer.objects.get(user = request.auth.user)

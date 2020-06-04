@@ -146,3 +146,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 SAFE_DELETE_INTERPRET_UNDELETED_OBJECTS_AS_CREATED = True
+
+#Designating the place to store uploaded files
+#https://blog.vivekshukla.xyz/uploading-file-using-api-django-rest-framework/
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
