@@ -19,7 +19,7 @@ class Customer(models.Model):
     phone_number = models.CharField(max_length=55)    
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.user.first_name} {self.user.last_name}'
 
     class Meta:
-        ordering = (F('user.date_joined').asc(nulls_last=True),)
+        ordering = (F('user__date_joined').asc(nulls_last=True),)
