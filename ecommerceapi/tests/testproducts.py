@@ -53,6 +53,23 @@ class TestProducts(TestCase):
         
         #check that the amount sold is 2 NOT 0 (by default it is 0 but the list method converts it the number based on order-products)
         self.assertEqual(response.data[0]["amount_sold"], 2)
+    
+    def testPost(self):
+        pass
 
+    def testGet(self):
+        pass
+
+    def testDelete(self):
+        pass
+
+    def testEdit(self):
+        pass
+
+    def testNumberQuery(self):
+        pass
+
+    def testUserQuery(self):
+        pass
 
 

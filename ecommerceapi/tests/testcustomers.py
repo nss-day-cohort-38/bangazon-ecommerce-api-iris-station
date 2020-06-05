@@ -4,7 +4,10 @@ from ecommerceapi.models import Order, Customer, PaymentType
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from unittest import skip
-
+"""
+- No Create
+- No destroy
+"""
 
 class TestCustomers(TestCase):
 
@@ -106,7 +109,7 @@ class TestCustomers(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["open_order_count"], 2)
 
-    def testMultipleOpenOrderFilter(self):
+    def testMultipleOpenOrderQuery(self):
         Customer.objects.create(
             user_id=1, address="111 test road", phone_number="5555555555")
 
@@ -154,7 +157,15 @@ class TestCustomers(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
+  
+    def testListCustomer(self):
+        pass
 
+    def testGetCustomer(self):
+        pass
+
+    def testEditCustomer(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
