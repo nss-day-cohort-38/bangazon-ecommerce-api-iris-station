@@ -35,30 +35,8 @@ class TestProductTypes(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(watches.name.encode(), response.content)
 
-    # def test_post_producttype(self):
-
-        # new_product_watch = {
-        #     "title": "Rolex",
-        #     "customer_id": 1,
-        #     "price": 3.00,
-        #     "description": "Ball out",
-        #     "quantity": 4,
-        #     "location": "Nashville",
-        #     "image_path": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQco0Tx9CnodcYY1PdeAzv6hw2EvWKPMv-TD9A3ig3T5o9TIvhz0yALZ3mzuLc2vkFOZ0IndIU&usqp=CAc",
-        #     "created_at": "2020-06-03 00:00:00Z",
-        #     "product_type_id": 4
-        # }
-        # test_new_watch = {
-        #     "name": "Watches",
-        # }
-
-        # response = self.client.post('products/form', kwargs={'pk': self.new_watch.pk})
-        # response = self.client.post((reverse('product/form'), HTTP_AUTHORIZATION = 'Token' + str(self.token)))
-        # response = self.client.post('product/form', test_new_watch, HTTP_AUTHORIZATION = 'Token' + str(self.token))
-        # self.assertEqual(response.status_code, 200)
-
-        # response = self.client.get(reverse('producttypes-list'), HTTP_AUTHORIZATION='Token' + str(self.token))
-        # self.assertEqual(response.status_code, 200)
+    def test_post_producttype(self):
+        pass
 
 
 if __name__ == '__main__':
