@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from unittest import skip
 
 """
-- Np Retrieve
+- No Retrieve
 """
 class TestOrders(TestCase):
 
