@@ -10,6 +10,8 @@ from rest_framework import status
 from django.core.files.base import ContentFile
 from ecommerceapi.models import Product, Customer, OrderProduct
 from datetime import datetime
+from django.http import HttpResponse
+import json
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for products
@@ -105,8 +107,8 @@ class Products(ViewSet):
             product = Product.objects.get(pk=pk)
             serializer = ProductSerializer(product, many=False, context={'request': request})
             return Response(serializer.data)
-        except Exception as ex:
-            return HttpResponseServerError(ex)
+        except Exception:
+            return HttpResponse(json.dumps({"error": "Does Not Exist"}), content_type="application/json")
 
          
     def update(self, request, pk=None):
