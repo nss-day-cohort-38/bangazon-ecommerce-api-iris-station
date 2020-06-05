@@ -22,8 +22,6 @@ class TestPaymentTypes(TestCase):
     def testDelete(self):
         pass
 
-    def testEdit(self):
-        pass
 
 
 if __name__ == '__main__':

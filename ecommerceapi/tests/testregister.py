@@ -10,20 +10,9 @@ class TestRegister(TestCase):
     def setUp(self):
         pass
 
-    def testPost(self):
+    def testGetToken(self):
         pass
     
-    def testList(self):
-        pass
-
-    def testGet(self):
-        pass
-
-    def testDelete(self):
-        pass
-
-    def testEdit(self):
-        pass
 
 
 if __name__ == '__main__':

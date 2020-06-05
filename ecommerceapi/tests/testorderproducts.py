@@ -16,14 +16,12 @@ class TestOrderProducts(TestCase):
     def testList(self):
         pass
 
-    def testGet(self):
-        pass
-
     def testDelete(self):
         pass
 
-    def testEdit(self):
+    def testOrderIdQuery(self):
         pass
+
 
 
 if __name__ == '__main__':

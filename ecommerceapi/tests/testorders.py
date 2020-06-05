@@ -45,7 +45,7 @@ class TestOrders(TestCase):
     def testEdit(self):
         pass
     
-    def testEdit(self):
+    def testPaymentTypeIdQuery(self):
         pass
 
 if __name__ == '__main__':

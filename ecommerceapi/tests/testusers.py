@@ -11,16 +11,7 @@ class TestUser(TestCase):
     def setUp(self):
         pass
 
-    def testPost(self):
-        pass
-
-    def testList(self):
-        pass
-
     def testGet(self):
-        pass
-
-    def testDelete(self):
         pass
 
     def testEdit(self):
