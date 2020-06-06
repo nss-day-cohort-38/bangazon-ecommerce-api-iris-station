@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from unittest import skip
 
-
+"""
+- Np Retrieve
+"""
 class TestOrders(TestCase):
 
     def setUp(self):
@@ -33,6 +35,18 @@ class TestOrders(TestCase):
             reverse('order-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
 
         self.assertEqual(len(response.data), 0)
+
+    def testPost(self):
+        pass
+    
+    def testList(self):
+        pass
+
+    def testEdit(self):
+        pass
+    
+    def testPaymentTypeIdQuery(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
