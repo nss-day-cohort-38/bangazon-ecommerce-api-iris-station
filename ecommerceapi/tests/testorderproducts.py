@@ -24,17 +24,22 @@ class TestOrderProducts(TestCase):
             user_id=1, address="808 Hot Dog Highway", phone_number="615-HOT-DOGS")
 
     def testPost(self):
+        # Post
         response = self.client.post(
             "/order_products", json.dumps({"order_id": 1, "product_id": 1}), content_type="application/json")
 
+        # Check for correct http response
         self.assertEqual(response.status_code, 200)
-        
+
+        # Get all orderproducts
         response = self.client.get(
             reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
 
+        # Check that there is only 1 object in the response
         self.assertEqual(len(response.data), 1)
 
     def testList(self):
+        # Create the necessary data
         thisOrder = Order.objects.create(
             created_at="2020-06-03 00:00:00Z",
             customer_id=1,
@@ -58,14 +63,18 @@ class TestOrderProducts(TestCase):
             created_at="2020-05-27 15:08:30.518598Z")
         order_product = OrderProduct.objects.create(order_id=1, product_id=1)
 
+        # Get response
         response = self.client.get(
             reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
 
+        # Check for proper http response
         self.assertEqual(response.status_code, 200)
 
+        # Check that there is just 1 object in the response
         self.assertEqual(len(response.data), 1)
 
     def testDelete(self):
+        # Create the necessary data
         thisOrder = Order.objects.create(
             created_at="2020-06-03 00:00:00Z",
             customer_id=1,
@@ -89,17 +98,23 @@ class TestOrderProducts(TestCase):
             created_at="2020-05-27 15:08:30.518598Z")
         order_product = OrderProduct.objects.create(order_id=1, product_id=1)
 
+        # Get response
         response = self.client.get(
             reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
 
+        # Check that there is just 1 object in the response
         self.assertEqual(len(response.data), 1)
 
+        # Check for proper http response
         self.assertEqual(response.status_code, 200)
 
+        #  Delete the orderproduct with id = 1
         response = self.client.delete('/order_products/1')
 
+        # Check for proper http response
         self.assertEqual(response.status_code, 204)
 
+        # Check that there are 0 objects in the response
         self.assertEqual(len(response.data), 0)
 
 
