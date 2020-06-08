@@ -94,12 +94,13 @@ class TestProducts(TestCase):
         self.assertEqual(len(response.data), 0)
 
     def testEdit(self):
+        # TODO: 
+        # At the moment of this test's creation, the only editing endpoint we have for products is quantity
+        
         updated_product = {
             "quantity": 9000,
-            "location": "Chicago"
         }
         
-        # FIXME: for some reason, the update on strings does not seem to be taking        
         response = self.client.put(
             reverse('products-detail', kwargs={'pk': 1}),
             updated_product,
@@ -115,13 +116,20 @@ class TestProducts(TestCase):
         )
         
         self.assertEqual(response.data["quantity"], updated_product["quantity"])
-        # FIXME: for some reason, the update on strings does not seem to be taking
-        # self.assertEqual(response.data["location"], updated_product["location"])
         
     def testNumberQuery(self):
+        ## twenty most recent products
         pass
 
     def testUserQuery(self):
-        pass
-
+        ## returns all the My Products for an authenticated user
+        response = self.client.get(
+            '/products?user', # Testing the user-specific endpoint
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)        
+        self.assertEqual(response.data[0]["amount_sold"], 2)
+        
 
