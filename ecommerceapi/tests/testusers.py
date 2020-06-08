@@ -4,6 +4,7 @@ from ecommerceapi.models import Customer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from unittest import skip
+import json
 
 
 class TestUser(TestCase):
@@ -14,7 +15,8 @@ class TestUser(TestCase):
             password="Test123",
             email="JohnnyBoy@me.com",
             first_name="Johnny",
-            last_name="Boy")
+            last_name="Boy"
+        )
 
     def testGet(self):
         # Get request for user created in setup
@@ -39,7 +41,22 @@ class TestUser(TestCase):
                          "User matching query does not exist.")
 
     def testEdit(self):
-        pass
+
+        put_response = self.client.put(
+            "/users/1", json.dumps({"username": "JoannaGirl", "first_name": "Joanna", "last_name": "Girl", "email": "JoannaGirl@me.com"}), content_type="application/json")
+
+        # Put request went through correctly
+        self.assertEqual(put_response.status_code, 204)
+
+        # Gets updated version on user 1
+        get_response = self.client.get("/users/1")
+
+        # Checks updated values
+        data = get_response.data
+        self.assertEqual(data["first_name"], "Joanna")
+        self.assertEqual(data["last_name"], "Girl")
+        self.assertEqual(data["username"], "JoannaGirl")
+        self.assertEqual(data["email"], "JoannaGirl@me.com")
 
 
 if __name__ == '__main__':
