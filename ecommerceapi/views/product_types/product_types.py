@@ -7,21 +7,20 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from ecommerceapi.models import ProductType
+from ecommerceapi.models import ProductType, Product
+
+
+
 
 class ProductTypeSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for product types
 
-    Arguments:
-        serializers
-    """
     class Meta:
         model = ProductType
         url = serializers.HyperlinkedIdentityField(
             view_name='producttypes',
             lookup_field='id'
         )
-        fields = ('id', 'name')
+        fields = ('id', 'name', )
         depth = 1
 
 class ProductTypes(ViewSet):
@@ -41,7 +40,7 @@ class ProductTypes(ViewSet):
         serializer = ProductTypeSerializer(newproducttype, context={'request': request})
 
         return Response(serializer.data)
-    
+
     def list(self, request):
         ''' handles get requests to server and returns a JSON response'''
         home = self.request.query_params.get('number', None)
@@ -54,7 +53,10 @@ class ProductTypes(ViewSet):
         return Response(serializer.data)
     
     def retrieve(self, request, pk=None):
-        pass
+        producttype = ProductType.objects.get(pk=pk)
+        serializer = ProductTypeSerializer(producttype, context={'request': request})
+        return Response(serializer.data)
+
     def update(self, request, pk=None): 
         pass
 
