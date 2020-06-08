@@ -24,85 +24,65 @@ class TestCustomers(TestCase):
             username=self.username_2, password=self.password_2)
         self.token_2 = Token.objects.create(user=self.user_2)
 
-    def testOrderCount(self):
+    def createOrders(self):
+        Order.objects.create(
+            customer_id=1,
+            payment_type_id=None,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+
+        Order.objects.create(
+            customer_id=1,
+            payment_type_id=1,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+
+        Order.objects.create(
+            customer_id=1,
+            payment_type_id=1,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+        
+    def createPaymentType(self):
+        PaymentType.objects.create(
+            merchant_name="Merchant Name",
+            account_number="123456789",
+            expiration_date="2028-02-18",
+            customer_id=1,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+        
+    def createCustomer(self):
         Customer.objects.create(
-            user_id=1, address="111 test road", phone_number="5555555555")
+            user_id=1, address="111 test road", phone_number="5555555555"
+        )
+
+    def testOrderCount(self):
+        self.createPaymentType()
+
+        self.createCustomer()
 
         response = self.client.get('/customers')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["order_count"], 0)
 
-        PaymentType.objects.create(
-            merchant_name="Merchant Name",
-            account_number="123456789",
-            expiration_date="2028-02-18",
-            customer_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        new_order = Order.objects.create(
-            customer_id=1,
-            payment_type_id=None,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        new_order = Order.objects.create(
-            customer_id=1,
-            payment_type_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        new_order = Order.objects.create(
-            customer_id=1,
-            payment_type_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
+        self.createOrders()
 
         response = self.client.get('/customers')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["order_count"], 3)
 
     def testOpenOrderCount(self):
-        Customer.objects.create(
-            user_id=1, address="111 test road", phone_number="5555555555")
-
-        PaymentType.objects.create(
-            merchant_name="Merchant Name",
-            account_number="123456789",
-            expiration_date="2028-02-18",
-            customer_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
+        self.createCustomer()
+        self.createPaymentType()
 
         response = self.client.get('/customers')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["open_order_count"], 0)
 
-        Order.objects.create(
-            customer_id=1,
-            payment_type_id=None,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        Order.objects.create(
-            customer_id=1,
-            payment_type_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        Order.objects.create(
-            customer_id=1,
-            payment_type_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        Order.objects.create(
-            customer_id=1,
-            payment_type_id=None,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
+        self.createOrders()
 
         response = self.client.get('/customers')
 
@@ -110,42 +90,14 @@ class TestCustomers(TestCase):
         self.assertEqual(response.data[0]["open_order_count"], 2)
 
     def testMultipleOpenOrderQuery(self):
-        Customer.objects.create(
-            user_id=1, address="111 test road", phone_number="5555555555")
-
-        PaymentType.objects.create(
-            merchant_name="Merchant Name",
-            account_number="123456789",
-            expiration_date="2028-02-18",
-            customer_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        Customer.objects.create(
-            user_id=2, address="111 test road", phone_number="5555555555")
+        self.createCustomer()
+        
+        self.createPaymentType()
 
         response = self.client.get('/customers')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["open_order_count"], 0)
-
-        Order.objects.create(
-            customer_id=1,
-            payment_type_id=None,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        Order.objects.create(
-            customer_id=1,
-            payment_type_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
-        Order.objects.create(
-            customer_id=2,
-            payment_type_id=1,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
 
         Order.objects.create(
             customer_id=1,
@@ -159,7 +111,13 @@ class TestCustomers(TestCase):
         self.assertEqual(len(response.data), 1)
   
     def testListCustomer(self):
-        pass
+        response = self.client.get(
+            '/customers', 
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), )
 
     def testGetCustomer(self):
         pass
