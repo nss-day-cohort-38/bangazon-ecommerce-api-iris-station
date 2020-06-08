@@ -57,19 +57,36 @@ class TestOrderProducts(TestCase):
         self.assertEqual(len(response.data), 1)
 
     def testDelete(self):
-        new_orderproduct = OrderProduct.objects.create(
-            order_id=1,
-            product_id=1
-        )
+        thisOrder = Order.objects.create(
+            created_at="2020-06-03 00:00:00Z",
+            customer_id=1,
+            payment_type_id=1)
+        furby = Product.objects.create(
+            title="Furby",
+            customer_id=1,
+            price=3800.71,
+            description="Demon baby from hell",
+            quantity=4,
+            location="Nashville",
+            image_path="https://upload.wikimedia.org/wikipedia/en/7/70/Furby_picture.jpg",
+            created_at="2020-06-03 00:00:00Z",
+            product_type_id=1)
+        toys = ProductType.objects.create(name="Toys")
+        pt = PaymentType.objects.create(
+            merchant_name="Stupid Company",
+            account_number="1234123412341234",
+            expiration_date="2024-01-01",
+            customer_id=1,
+            created_at="2020-05-27 15:08:30.518598Z")
+        order_product = OrderProduct.objects.create(order_id=1, product_id=1)
 
-        response = self.client.get(
-            reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
+        # response = self.client.get(
+        #     reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
 
-        self.assertEqual(len(response.data), 1)
+        # self.assertEqual(len(response.data), 1)
 
         response = self.client.delete(
-            reverse('orderproducts-list'), kwargs={'pk': 1}, HTTP_AUTHORIZATION='Token ' + str(self.token)
-        )
+            reverse('orderproducts-detail', kwargs={'pk': 1}), HTTP_AUTHORIZATION='Token ' + str(self.token))
 
         self.assertEqual(response.status_code, 204)
 
