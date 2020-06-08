@@ -53,7 +53,30 @@ class TestProducts(TestCase):
         self.assertEqual(response.data[0]["amount_sold"], 2)
     
     def testPost(self):
-        pass
+        new_product = {
+            "title":"Furbot",
+            "customer_id": 1,
+            "price": 4.11,
+            "description": "Knock-off furby",
+            "quantity": 4, 
+            "location": "Nashville",
+            "image_path": "franks.jpg",
+            "created_at": "2020-05-27 15:08:30.518598Z",
+            "product_type_id": 1
+        }
+        
+        response = self.client.post(
+            reverse('products-list'), 
+            new_product,
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(Product.objects.count(), 2)
+
+        self.assertEqual(Product.objects.get(pk=2).title, new_product["title"])
+
 
     def testGet(self):
         response = self.client.get(
@@ -68,10 +91,10 @@ class TestProducts(TestCase):
         self.assertEqual(response.data[0]["title"], "Furby")
         # self.assertEqual(response.data[0]["customer_id"], 1)
         
-        # FIXME: 
-        # For some reason, decimal fields are returning as strings, 
-        # so this is failing:
-        # self.assertEqual(response.data[0]["price"], 3.11)
+        # Note: decimals need to be serialized as strings 
+        # in JSON, "since float representation would lose precision"
+        # https://github.com/encode/django-rest-framework/issues/508
+        self.assertEqual(response.data[0]["price"], "3.11")
         self.assertEqual(response.data[0]["description"], "Demon baby from hell")
         self.assertEqual(response.data[0]["quantity"], 4)
         self.assertEqual(response.data[0]["location"], "Nashville")
