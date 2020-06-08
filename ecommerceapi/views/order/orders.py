@@ -13,8 +13,6 @@ from .. import PaymentSerializer
 from django.db.models import Count, F, When, Case, IntegerField
 from django.utils import timezone
 
-
-
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
@@ -78,7 +76,8 @@ class Orders(ViewSet):
             Handles creating a new order when a user hits add to cart
         '''
         customer = Customer.objects.get(user=request.auth.user)
-        # thanks https://stackoverflow.com/a/37607525/798303
+        # https://stackoverflow.com/a/37607525/798303
+        # This resolved an issue with naive datetimes
         date = timezone.now()
         newOrder = Order()
         newOrder.customer = customer
