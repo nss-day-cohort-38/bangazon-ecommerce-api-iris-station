@@ -35,7 +35,7 @@ class TestRegister(TestCase):
         response = self.client.post(
             '/register/', json_info, content_type="application/json")
 
-        # Checks to see if you cannt add another user with the same username
+        # Checks to see if you cannot add another user with the same username
         converted = response.content.decode("utf-8")
         self.assertTrue(
             "UNIQUE constraint failed: auth_user.username" in converted)
