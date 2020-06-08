@@ -6,10 +6,9 @@ from safedelete.models import SafeDeleteModel
 from safedelete.models import SOFT_DELETE
 
 class Product(SafeDeleteModel):
-  
     '''
         Product Models:
-        
+
         Arguments Required:
             title-- character field
             customer-- foreign key for Customer
