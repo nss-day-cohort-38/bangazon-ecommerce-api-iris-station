@@ -14,19 +14,16 @@ class TestProducts(TestCase):
             username=self.username, password=self.password)
         self.token = Token.objects.create(user=self.user)
         self.customer = Customer.objects.create(user_id=1, address="111 test road", phone_number="5555555555")
-        
-
-    def testListProducts(self):
         ''' Set up all foreign databases that are needed'''
         toys = ProductType.objects.create(name="Toys")
         furby = Product.objects.create(
             title="Furby",
             customer_id=1,
-            price=3.00,
+            price=3.11,
             description="Demon baby from hell",
             quantity=4, 
             location="Nashville",
-            image_path="https://upload.wikimedia.org/wikipedia/en/7/70/Furby_picture.jpg",
+            image_path="hotdogs.jpg",
             created_at="2020-06-03 00:00:00Z",
             product_type_id = 1)
         pt = PaymentType.objects.create(
@@ -41,7 +38,8 @@ class TestProducts(TestCase):
             created_at="2020-05-29 16:29:18.874982Z")
         order_product = OrderProduct.objects.create(order_id = 1, product_id = 1)
         order_product_two = OrderProduct.objects.create(order_id = 1, product_id = 1)
-        
+
+    def testListProducts(self):
         response = self.client.get(
             reverse('products-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
         
@@ -55,21 +53,115 @@ class TestProducts(TestCase):
         self.assertEqual(response.data[0]["amount_sold"], 2)
     
     def testPost(self):
-        pass
+        new_product = {
+            "title":"Furbot",
+            "customer_id": 1,
+            "price": 4.11,
+            "description": "Knock-off furby",
+            "quantity": 4, 
+            "location": "Nashville",
+            "image_path": "franks.jpg",
+            "created_at": "2020-05-27 15:08:30.518598Z",
+            "product_type_id": 1
+        }
+        
+        response = self.client.post(
+            reverse('products-list'), 
+            new_product,
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(Product.objects.count(), 2)
+
+        self.assertEqual(Product.objects.get(pk=2).title, new_product["title"])
+
 
     def testGet(self):
-        pass
+        response = self.client.get(
+            reverse('products-list'), 
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["id"], 1)
+        self.assertEqual(response.data[0]["title"], "Furby")
+        # self.assertEqual(response.data[0]["customer_id"], 1)
+        
+        # Note: decimals need to be serialized as strings 
+        # in JSON, "since float representation would lose precision"
+        # https://github.com/encode/django-rest-framework/issues/508
+        self.assertEqual(response.data[0]["price"], "3.11")
+        self.assertEqual(response.data[0]["description"], "Demon baby from hell")
+        self.assertEqual(response.data[0]["quantity"], 4)
+        self.assertEqual(response.data[0]["location"], "Nashville")
+        self.assertEqual(response.data[0]["image_path"], "http://testserver/media/hotdogs.jpg")
+        self.assertEqual(response.data[0]["created_at"], "2020-06-03T00:00:00Z")
+        self.assertEqual(response.data[0]["product_type_id"], 1)        
 
     def testDelete(self):
-        pass
+        response = self.client.delete(
+            reverse('products-detail', kwargs={'pk': 1}),
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 204)
+
+        response = self.client.get(
+            reverse('products-list'), 
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        self.assertEqual(len(response.data), 0)
 
     def testEdit(self):
-        pass
-
+        # TODO: 
+        # At the moment of this test's creation, the only editing endpoint we have for products is quantity
+        
+        updated_product = {
+            "quantity": 9000,
+        }
+        
+        response = self.client.put(
+            reverse('products-detail', kwargs={'pk': 1}),
+            updated_product,
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 204)
+        
+        response = self.client.get(
+            reverse('products-detail', kwargs={'pk': 1}), 
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.data["quantity"], updated_product["quantity"])
+        
     def testNumberQuery(self):
-        pass
+        # testing the query parameters on list that return
+        # the twenty most recent products
+        response = self.client.get(
+            '/products?number', # Testing the number-specific endpoint
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)        
+        self.assertEqual(response.data[0]["amount_sold"], 2)
 
     def testUserQuery(self):
-        pass
-
+        # testing the query parameters on list that 
+        # returns all the "My Products" for an authenticated user
+        response = self.client.get(
+            '/products?user', # Testing the user-specific endpoint
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)        
+        self.assertEqual(response.data[0]["amount_sold"], 2)
+        
 
