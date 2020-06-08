@@ -80,13 +80,15 @@ class TestOrderProducts(TestCase):
             created_at="2020-05-27 15:08:30.518598Z")
         order_product = OrderProduct.objects.create(order_id=1, product_id=1)
 
-        # response = self.client.get(
-        #     reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
+        response = self.client.get(
+            reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
 
-        # self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data), 1)
+
+        self.assertEqual(response.status_code, 200)
 
         response = self.client.delete(
-            reverse('orderproducts-detail', kwargs={'pk': 1}), HTTP_AUTHORIZATION='Token ' + str(self.token))
+            '/order_products', kwargs={'pk': 1}, HTTP_AUTHORIZATION='Token ' + str(self.token))
 
         self.assertEqual(response.status_code, 204)
 
