@@ -4,6 +4,7 @@ from ecommerceapi.models import Product, Customer, Order, OrderProduct, ProductT
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from unittest import skip
+import json
 
 """
 - Maybe this will work
@@ -14,16 +15,26 @@ class TestOrderProducts(TestCase):
     # Set up all data that will be needed to excute all the tests in the test file.
     def setUp(self):
         pass
-        self.username = "KittyBaby"
-        self.password = "KittyBabyNumber1"
+        self.username = "HotDog"
+        self.password = "HotDogs"
         self.user = User.objects.create_user(
             username=self.username, password=self.password)
         self.token = Token.objects.create(user=self.user)
         self.customer = Customer.objects.create(
-            user_id=1, address="808 Kitty Baby Blvd", phone_number="615-Kitty-Bae")
+            user_id=1, address="808 Hot Dog Highway", phone_number="615-HOT-DOGS")
 
     def testPost(self):
-        pass
+        response = self.client.post(
+            "/order_products", json.dumps({"order_id": 1, "product_id": 1}), content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
+
+        print(response.data)
+        
+        response = self.client.get(
+            reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
+
+        self.assertEqual(len(response.data), 1)
 
     def testList(self):
         thisOrder = Order.objects.create(
@@ -87,15 +98,11 @@ class TestOrderProducts(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.delete(
-            '/order_products', kwargs={'pk': 1}, HTTP_AUTHORIZATION='Token ' + str(self.token))
+        response = self.client.delete('/order_products/1')
 
         self.assertEqual(response.status_code, 204)
 
         self.assertEqual(len(response.data), 0)
-
-    def testOrderIdQuery(self):
-        pass
 
 
 if __name__ == '__main__':
