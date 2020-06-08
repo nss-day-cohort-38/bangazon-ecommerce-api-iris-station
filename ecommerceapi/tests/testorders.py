@@ -43,21 +43,59 @@ class TestOrders(TestCase):
             created_at="2020-05-29T14:42:51.221420Z"
         )
 
-        response = self.client.delete(
-            reverse('order-detail', kwargs={'pk': 1}), HTTP_AUTHORIZATION='Token ' + str(self.token))
+        response = self.client.get(
+            reverse('order-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
+        
+        # test that there is only one order that has been created 
+        self.assertEqual(len(response.data), 1)
+        
+        # test that it is indeed the one we created 
+        self.assertEqual(response.data[0]["customer"]["id"], 1)
+    
+    def testList(self):
+        new_order = Order.objects.create(
+            customer_id=1,
+            payment_type_id=None,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+
+        response = self.client.get(
+            reverse('order-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
         
         # test that there is only one order that has been created 
         self.assertEqual(len(response.data), 1)
 
-        # test that it is indeed the one we created 
-        self.assertEqual(response.data[0]["created_at"], "2020-05-29T14:42:51.221420Z")
-    
-    def testList(self):
-        pass
-
     def testEdit(self):
-        pass
-    
+        new_order = Order.objects.create(
+            customer_id=1,
+            payment_type_id=None,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+        pt = PaymentType.objects.create(
+            merchant_name="Stupid Company", 
+            account_number="1234123412341234", 
+            expiration_date="2024-01-01", 
+            customer_id=1, 
+            created_at="2020-05-27 15:08:30.518598Z")
+        u_order = {
+            "customer_id": 1,
+            "payment_type_id": 1,
+            "created_at": "2020-05-29T14:42:51.221420Z"
+        }
+        response = self.client.put(
+            reverse('order-detail', kwargs={'pk': 1}),
+            u_order,
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+
+        self.assertEqual(response.status_code, 204)
+
+        response = self.client.get(
+            reverse('order-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
+
+        self.assertEqual(response.data[0]['payment_type_id'], 1)
+        
     def testPaymentTypeIdQuery(self):
         pass
 
