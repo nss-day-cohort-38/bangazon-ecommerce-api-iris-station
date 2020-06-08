@@ -7,7 +7,7 @@ from unittest import skip
 import json
 
 """
-- Np Retrieve
+- No Retrieve
 """
 class TestOrders(TestCase):
 

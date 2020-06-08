@@ -7,16 +7,25 @@ from unittest import skip
 import unittest
 import django.contrib.sites.requests
 
-"""
-- No Retrieve
-- No Update
-- No Destroy
-"""
 
 class TestProductTypes(TestCase):
-    # Set up all data that will be needed to excute all the tests in the test file.
     def setUp(self):
-        pass
+        self.username = "TestUser"
+        self.password = "testword1"
+        self.user = User.objects.create_user(username=self.username, password=self.password)
+        self.token = Token.objects.create(user=self.user)
+        self.customer = Customer.objects.create(user_id=1, address="111 test road", phone_number="5555555555")
+        self.new_watch_instance = ProductType.objects.create(id=4, name="Watches")
+        self.new_watch = Product.objects.create(
+            title="Rolex",
+            customer_id=1,
+            price=3.00,
+            description="Ball Out",
+            quantity=4,
+            location="Nashville",
+            image_path="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQco0Tx9CnodcYY1PdeAzv6hw2EvWKPMv-TD9A3ig3T5o9TIvhz0yALZ3mzuLc2vkFOZ0IndIU&usqp=CAc",
+            created_at="2020-06-03 00:00:00Z",
+            product_type_id=4)
 
     def test_list_product_type(self):
         # watches = ProductType.objects.create(name="Watches")
