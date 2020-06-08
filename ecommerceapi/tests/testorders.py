@@ -115,6 +115,8 @@ class TestOrders(TestCase):
 
         self.assertEqual(response.data[0]['payment_type_id'], 1)
         
+
+    # dont use in web app it is set up but it isn't needed.    
     def testPaymentTypeIdQuery(self):
         pass
 
