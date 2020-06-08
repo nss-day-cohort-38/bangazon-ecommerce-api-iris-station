@@ -28,8 +28,10 @@ class TestPaymentTypes(TestCase):
 
         self.assertEqual(response.status_code, 200)
         
+        #test that we added one
         self.assertEqual(len(response.data), 1)
 
+        #test that correct data was posted
         self.assertEqual(response.data[0]["merchant_name"], "Stupid Company")
     
     def testList(self):
@@ -43,8 +45,10 @@ class TestPaymentTypes(TestCase):
         response = self.client.get(
             reverse('paymenttypes-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
         
+        # test that we get a positive status code response
         self.assertEqual(response.status_code, 200)
         
+        # test that it one was added and returned
         self.assertEqual(len(response.data), 1)
         
 
@@ -59,9 +63,12 @@ class TestPaymentTypes(TestCase):
         response = self.client.get(
             reverse('paymenttypes-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
         
+        #positive status cude returned  :D
         self.assertEqual(response.status_code, 200)
 
+        # test that it was id'd corrected 
         self.assertEqual(response.data[0]["id"], 1)
+
 
         self.assertIn(pt.merchant_name.encode(), response.content)
 
@@ -77,11 +84,13 @@ class TestPaymentTypes(TestCase):
         response = self.client.delete(
             reverse('paymenttypes-detail', kwargs={'pk': 1}), HTTP_AUTHORIZATION='Token ' + str(self.token))
         
+        #test that we have a positive status code returned with no content
         self.assertEqual(response.status_code, 204)
 
         response = self.client.get(
             reverse('paymenttypes-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
 
+        # test that the length of the payment type list is 0
         self.assertEqual(len(response.data), 0)
 
 
