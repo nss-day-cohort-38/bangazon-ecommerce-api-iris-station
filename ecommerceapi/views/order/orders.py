@@ -11,6 +11,8 @@ from rest_framework import status
 from ecommerceapi.models import Order, Customer
 from .. import PaymentSerializer
 from django.db.models import Count, F, When, Case, IntegerField
+from django.utils import timezone
+
 
 
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
@@ -76,7 +78,8 @@ class Orders(ViewSet):
             Handles creating a new order when a user hits add to cart
         '''
         customer = Customer.objects.get(user=request.auth.user)
-        date = datetime.datetime.now()
+        # thanks https://stackoverflow.com/a/37607525/798303
+        date = timezone.now()
         newOrder = Order()
         newOrder.customer = customer
         newOrder.created_at = date
