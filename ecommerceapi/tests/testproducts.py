@@ -57,7 +57,8 @@ class TestProducts(TestCase):
 
     def testGet(self):
         response = self.client.get(
-            reverse('products-list'), HTTP_AUTHORIZATION='Token ' + str(self.token)
+            reverse('products-list'), 
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
         )
         
         self.assertEqual(response.status_code, 200)
@@ -76,13 +77,21 @@ class TestProducts(TestCase):
         self.assertEqual(response.data[0]["location"], "Nashville")
         self.assertEqual(response.data[0]["image_path"], "http://testserver/media/hotdogs.jpg")
         self.assertEqual(response.data[0]["created_at"], "2020-06-03T00:00:00Z")
-        self.assertEqual(response.data[0]["product_type_id"], 1)
-
-        # self.assertIn(furby.name.encode(), response.content)
-        
+        self.assertEqual(response.data[0]["product_type_id"], 1)        
 
     def testDelete(self):
-        pass
+        response = self.client.delete(
+            reverse('products-detail', kwargs={'pk': 1}),
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 204)
+
+        response = self.client.get(
+            reverse('products-list'), 
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        self.assertEqual(len(response.data), 0)
 
     def testEdit(self):
         pass
