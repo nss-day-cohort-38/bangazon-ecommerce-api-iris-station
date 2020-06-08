@@ -150,7 +150,28 @@ class TestCustomers(TestCase):
         self.assertEqual(response.data[0]["address"], "111 test road")
 
     def testEditCustomer(self):
-        pass
+        self.createCustomer()
+        
+        updated_customer = {
+            "address": "New Address",
+            "phone_number": "4455555555"
+        }
+        
+        response = self.client.put(
+            reverse('customer-detail', kwargs={'pk': 1}),
+            updated_customer,
+            content_type="application/json",
+            HTTP_AUTHORIZATION='Token ' + str(self.token_1)
+        )
+        
+        self.assertEqual(response.status_code, 204)
+        
+        response = self.client.get(
+            reverse('customer-detail', kwargs={'pk': 1}),
+            HTTP_AUTHORIZATION='Token ' + str(self.token_1)
+        )
+        
+        self.assertEqual(response.data["phone_number"], updated_customer["phone_number"])
 
 if __name__ == '__main__':
     unittest.main()
