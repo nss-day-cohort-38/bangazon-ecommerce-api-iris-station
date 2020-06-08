@@ -37,7 +37,20 @@ class TestOrders(TestCase):
         self.assertEqual(len(response.data), 0)
 
     def testPost(self):
-        pass
+        new_order = Order.objects.create(
+            customer_id=1,
+            payment_type_id=None,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+
+        response = self.client.delete(
+            reverse('order-detail', kwargs={'pk': 1}), HTTP_AUTHORIZATION='Token ' + str(self.token))
+        
+        # test that there is only one order that has been created 
+        self.assertEqual(len(response.data), 1)
+
+        # test that it is indeed the one we created 
+        self.assertEqual(response.data[0]["created_at"], "2020-05-29T14:42:51.221420Z")
     
     def testList(self):
         pass
