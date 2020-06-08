@@ -9,6 +9,7 @@ from unittest import skip
 - Maybe this will work
 """
 
+
 class TestOrderProducts(TestCase):
     # Set up all data that will be needed to excute all the tests in the test file.
     def setUp(self):
@@ -23,7 +24,7 @@ class TestOrderProducts(TestCase):
 
     def testPost(self):
         pass
-    
+
     def testList(self):
         thisOrder = Order.objects.create(
             created_at="2020-06-03 00:00:00Z",
@@ -32,21 +33,21 @@ class TestOrderProducts(TestCase):
         furby = Product.objects.create(
             title="Furby",
             customer_id=1,
-            price=3.00,
+            price=3800.71,
             description="Demon baby from hell",
-            quantity=4, 
+            quantity=4,
             location="Nashville",
             image_path="https://upload.wikimedia.org/wikipedia/en/7/70/Furby_picture.jpg",
             created_at="2020-06-03 00:00:00Z",
-            product_type_id = 1)
+            product_type_id=1)
         toys = ProductType.objects.create(name="Toys")
         pt = PaymentType.objects.create(
-            merchant_name="Stupid Company", 
-            account_number="1234123412341234", 
-            expiration_date="2024-01-01", 
-            customer_id=1, 
+            merchant_name="Stupid Company",
+            account_number="1234123412341234",
+            expiration_date="2024-01-01",
+            customer_id=1,
             created_at="2020-05-27 15:08:30.518598Z")
-        order_product = OrderProduct.objects.create(order_id = 1, product_id = 1)
+        order_product = OrderProduct.objects.create(order_id=1, product_id=1)
 
         response = self.client.get(
             reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
@@ -66,8 +67,17 @@ class TestOrderProducts(TestCase):
 
         self.assertEqual(len(response.data), 1)
 
+        response = self.client.delete(
+            reverse('orderproducts-list'), kwargs={'pk': 1}, HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+
+        self.assertEqual(response.status_code, 204)
+
+        self.assertEqual(len(response.data), 0)
+
     def testOrderIdQuery(self):
         pass
+
 
 if __name__ == '__main__':
     unittest.main()

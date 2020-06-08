@@ -1,33 +1,5 @@
 from django.test import TestCase
 from django.urls import reverse
-<<<<<<< HEAD
-from ecommerceapi.models import Product
-from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
-from unittest import skip
-
-"""
-- No Retrieve
-- No Update
-- No Destroy
-"""
-
-class TestProductTypes(TestCase):
-    # Set up all data that will be needed to excute all the tests in the test file.
-    def setUp(self):
-        pass
-
-    def testPost(self):
-        pass
-    
-    def testList(self):
-        pass
-
-    def testNumberQuery(self):
-        pass
-
-    
-=======
 from ecommerceapi.models import Order, Customer, ProductType, Product, PaymentType
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
@@ -66,7 +38,6 @@ class TestProductTypes(TestCase):
     def test_post_producttype(self):
         pass
 
->>>>>>> 1b95b6c00fe6c70745ca832f52f2868815fc02e9
 
 if __name__ == '__main__':
     unittest.main()
