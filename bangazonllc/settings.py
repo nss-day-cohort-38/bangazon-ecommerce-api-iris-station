@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'ecommerceapi',
-    'safedelete'
+    'safedelete',
 ]
 
 REST_FRAMEWORK = {

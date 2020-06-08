@@ -4,6 +4,7 @@ from ecommerceapi.models import Order, Customer, PaymentType
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from unittest import skip
+import json
 
 """
 - Np Retrieve
@@ -49,6 +50,8 @@ class TestOrders(TestCase):
         # test that there is only one order that has been created 
         self.assertEqual(len(response.data), 1)
         
+        self.assertEqual(response.status_code, 200)
+
         # test that it is indeed the one we created 
         self.assertEqual(response.data[0]["customer"]["id"], 1)
     
@@ -64,6 +67,22 @@ class TestOrders(TestCase):
         
         # test that there is only one order that has been created 
         self.assertEqual(len(response.data), 1)
+
+        second_order = Order.objects.create(
+            customer_id=1,
+            payment_type_id=None,
+            created_at="2019-06-29T14:42:51.221420Z"
+        )
+
+
+        response = self.client.get(
+            reverse('order-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
+
+        # test for two orders returning under length
+
+        self.assertEqual(len(response.data), 2)
+
+        self.assertEqual(response.status_code, 200)
 
     def testEdit(self):
         new_order = Order.objects.create(
