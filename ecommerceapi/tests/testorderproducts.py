@@ -23,6 +23,28 @@ class TestOrderProducts(TestCase):
         self.customer = Customer.objects.create(
             user_id=1, address="808 Hot Dog Highway", phone_number="615-HOT-DOGS")
 
+        thisOrder = Order.objects.create(
+            created_at="2020-06-03 00:00:00Z",
+            customer_id=1,
+            payment_type_id=1)
+        furby = Product.objects.create(
+            title="Furby",
+            customer_id=1,
+            price=3800.71,
+            description="Demon baby from hell",
+            quantity=4,
+            location="Nashville",
+            image_path="https://upload.wikimedia.org/wikipedia/en/7/70/Furby_picture.jpg",
+            created_at="2020-06-03 00:00:00Z",
+            product_type_id=1)
+        toys = ProductType.objects.create(name="Toys")
+        pt = PaymentType.objects.create(
+            merchant_name="Stupid Company",
+            account_number="1234123412341234",
+            expiration_date="2024-01-01",
+            customer_id=1,
+            created_at="2020-05-27 15:08:30.518598Z")
+
     def testPost(self):
         # Post
         response = self.client.post(
@@ -40,27 +62,6 @@ class TestOrderProducts(TestCase):
 
     def testList(self):
         # Create the necessary data
-        thisOrder = Order.objects.create(
-            created_at="2020-06-03 00:00:00Z",
-            customer_id=1,
-            payment_type_id=1)
-        furby = Product.objects.create(
-            title="Furby",
-            customer_id=1,
-            price=3800.71,
-            description="Demon baby from hell",
-            quantity=4,
-            location="Nashville",
-            image_path="https://upload.wikimedia.org/wikipedia/en/7/70/Furby_picture.jpg",
-            created_at="2020-06-03 00:00:00Z",
-            product_type_id=1)
-        toys = ProductType.objects.create(name="Toys")
-        pt = PaymentType.objects.create(
-            merchant_name="Stupid Company",
-            account_number="1234123412341234",
-            expiration_date="2024-01-01",
-            customer_id=1,
-            created_at="2020-05-27 15:08:30.518598Z")
         order_product = OrderProduct.objects.create(order_id=1, product_id=1)
 
         # Get response
@@ -75,27 +76,6 @@ class TestOrderProducts(TestCase):
 
     def testDelete(self):
         # Create the necessary data
-        thisOrder = Order.objects.create(
-            created_at="2020-06-03 00:00:00Z",
-            customer_id=1,
-            payment_type_id=1)
-        furby = Product.objects.create(
-            title="Furby",
-            customer_id=1,
-            price=3800.71,
-            description="Demon baby from hell",
-            quantity=4,
-            location="Nashville",
-            image_path="https://upload.wikimedia.org/wikipedia/en/7/70/Furby_picture.jpg",
-            created_at="2020-06-03 00:00:00Z",
-            product_type_id=1)
-        toys = ProductType.objects.create(name="Toys")
-        pt = PaymentType.objects.create(
-            merchant_name="Stupid Company",
-            account_number="1234123412341234",
-            expiration_date="2024-01-01",
-            customer_id=1,
-            created_at="2020-05-27 15:08:30.518598Z")
         order_product = OrderProduct.objects.create(order_id=1, product_id=1)
 
         # Get response
