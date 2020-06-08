@@ -97,16 +97,30 @@ class TestCustomers(TestCase):
 
     def testMultipleOpenOrderQuery(self):
         self.createCustomer()
-        self.createOrders()
         self.createPaymentType()
 
+        Customer.objects.create(
+            user_id=2, address="111 test road", phone_number="5555555555"
+        )
+        
         response = self.client.get('/customers')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["open_order_count"], 0)
 
         self.createOrders()
-        self.createOrders()
+        
+        Order.objects.create(
+            customer_id=2,
+            payment_type_id=None,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
+        
+        Order.objects.create(
+            customer_id=2,
+            payment_type_id=None,
+            created_at="2020-05-29T14:42:51.221420Z"
+        )
         
         response = self.client.get('/customers', {"multiple_open": True})
 
