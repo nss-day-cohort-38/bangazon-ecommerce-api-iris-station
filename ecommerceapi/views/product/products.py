@@ -12,7 +12,7 @@ from ecommerceapi.models import Product, Customer, OrderProduct, ProductType
 from datetime import datetime
 from django.http import HttpResponse
 import json
-
+from django.utils import timezone
 
 
 
@@ -65,7 +65,10 @@ class Products(ViewSet):
         # "When Django handles a file upload, the file data ends up placed in request.FILES"
         # https://docs.djangoproject.com/en/3.0/topics/http/file-uploads/
             newproduct.image_path = request.FILES["image_path"]
-        newproduct.created_at = datetime.today().strftime('%Y-%m-%d')
+        
+        # https://stackoverflow.com/a/37607525/798303
+        # Changed to timezone (from datetime) to fix a naive time error
+        newproduct.created_at = timezone.now()
         newproduct.product_type_id = request.data["product_type_id"]
         newcustomer = Customer.objects.get(user=request.auth.user)
         newproduct.customer = newcustomer
