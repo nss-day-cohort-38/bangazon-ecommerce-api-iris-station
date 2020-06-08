@@ -138,7 +138,16 @@ class TestCustomers(TestCase):
         self.assertEqual(len(response.data), 1)
 
     def testGetCustomer(self):
-        pass
+        self.createCustomer()
+        
+        response = self.client.get(
+            '/customers'
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["id"], 1)
+        self.assertEqual(response.data[0]["address"], "111 test road")
 
     def testEditCustomer(self):
         pass
