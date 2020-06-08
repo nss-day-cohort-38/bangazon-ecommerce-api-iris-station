@@ -10,20 +10,6 @@ from unittest import skip
 """
 
 class TestCustomers(TestCase):
-
-    def setUp(self):
-        self.username_1 = "TestUser"
-        self.password_1 = "testword1"
-        self.user_1 = User.objects.create_user(
-            username=self.username_1, password=self.password_1)
-        self.token_1 = Token.objects.create(user=self.user_1)
-
-        self.username_2 = "TestUser2"
-        self.password_2 = "testword2"
-        self.user_2 = User.objects.create_user(
-            username=self.username_2, password=self.password_2)
-        self.token_2 = Token.objects.create(user=self.user_2)
-
     def createOrders(self):
         Order.objects.create(
             customer_id=1,
@@ -56,6 +42,20 @@ class TestCustomers(TestCase):
         Customer.objects.create(
             user_id=1, address="111 test road", phone_number="5555555555"
         )
+
+    def setUp(self):
+        self.username_1 = "TestUser"
+        self.password_1 = "testword1"
+        self.user_1 = User.objects.create_user(
+            username=self.username_1, password=self.password_1)
+        self.token_1 = Token.objects.create(user=self.user_1)
+
+        self.username_2 = "TestUser2"
+        self.password_2 = "testword2"
+        self.user_2 = User.objects.create_user(
+            username=self.username_2, password=self.password_2)
+        self.token_2 = Token.objects.create(user=self.user_2)
+
 
     def testOrderCount(self):
         self.createPaymentType()
