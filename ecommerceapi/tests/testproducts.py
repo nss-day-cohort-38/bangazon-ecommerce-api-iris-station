@@ -118,11 +118,20 @@ class TestProducts(TestCase):
         self.assertEqual(response.data["quantity"], updated_product["quantity"])
         
     def testNumberQuery(self):
-        ## twenty most recent products
-        pass
+        # testing the query parameters on list that return
+        # the twenty most recent products
+        response = self.client.get(
+            '/products?number', # Testing the number-specific endpoint
+            HTTP_AUTHORIZATION='Token ' + str(self.token)
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)        
+        self.assertEqual(response.data[0]["amount_sold"], 2)
 
     def testUserQuery(self):
-        ## returns all the My Products for an authenticated user
+        # testing the query parameters on list that 
+        # returns all the "My Products" for an authenticated user
         response = self.client.get(
             '/products?user', # Testing the user-specific endpoint
             HTTP_AUTHORIZATION='Token ' + str(self.token)
