@@ -83,6 +83,12 @@ class TestCustomers(TestCase):
         self.assertEqual(response.data[0]["open_order_count"], 0)
 
         self.createOrders()
+        
+        Order.objects.create(
+            customer_id=1,
+            payment_type_id=None,
+            created_at="2020-05-22T14:42:51.221420Z"
+        )
 
         response = self.client.get('/customers')
 
@@ -91,7 +97,7 @@ class TestCustomers(TestCase):
 
     def testMultipleOpenOrderQuery(self):
         self.createCustomer()
-        
+        self.createOrders()
         self.createPaymentType()
 
         response = self.client.get('/customers')
@@ -99,25 +105,23 @@ class TestCustomers(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["open_order_count"], 0)
 
-        Order.objects.create(
-            customer_id=1,
-            payment_type_id=None,
-            created_at="2020-05-29T14:42:51.221420Z"
-        )
-
+        self.createOrders()
+        self.createOrders()
+        
         response = self.client.get('/customers', {"multiple_open": True})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
   
     def testListCustomer(self):
+        self.createCustomer()
+        
         response = self.client.get(
-            '/customers', 
-            HTTP_AUTHORIZATION='Token ' + str(self.token)
+            '/customers'
         )
         
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), )
+        self.assertEqual(len(response.data), 1)
 
     def testGetCustomer(self):
         pass
