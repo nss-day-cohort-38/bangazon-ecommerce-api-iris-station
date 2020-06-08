@@ -28,8 +28,6 @@ class TestOrderProducts(TestCase):
             "/order_products", json.dumps({"order_id": 1, "product_id": 1}), content_type="application/json")
 
         self.assertEqual(response.status_code, 200)
-
-        print(response.data)
         
         response = self.client.get(
             reverse('orderproducts-list'), HTTP_AUTHORIZATION='Token ' + str(self.token))
