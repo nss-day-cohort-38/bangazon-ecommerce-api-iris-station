@@ -27,16 +27,26 @@ class TestProductTypes(TestCase):
             created_at="2020-06-03 00:00:00Z",
             product_type_id=4)
 
-
     def test_list_product_type(self):
-        watches = ProductType.objects.create(name="Watches")
-        response = self.client.get(
-            reverse('producttypes-list'), HTTP_AUTHORIZATION='Token' + str(self.token))
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(watches.name.encode(), response.content)
-
-    def test_post_producttype(self):
+        # watches = ProductType.objects.create(name="Watches")
+        # response = self.client.get(
+        #     reverse('producttypes-list'), HTTP_AUTHORIZATION='Token' + str(self.token))
+        # self.assertEqual(response.status_code, 200)
+        # self.assertIn(watches.name.encode(), response.content)
         pass
+
+
+    def testPost(self):
+        pass
+
+
+    def testList(self):
+        pass
+
+
+    def testNumberQuery(self):
+        pass
+
 
 
 if __name__ == '__main__':
