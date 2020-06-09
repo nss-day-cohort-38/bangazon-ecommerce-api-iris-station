@@ -1,4 +1,4 @@
-# Bangazon Django RESTful App 
+# Bangazon Django RESTful API 
 
 This is the back-end counterpart to the full-stack [Bangazon eCommerce Web App](https://github.com/nss-day-cohort-38/bangazon-ecommerce-web-app-iris-station). A full description of the app can be found there. 
 
